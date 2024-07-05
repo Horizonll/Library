@@ -8,7 +8,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\a.exe",
+                "${fileDirname}\\library.exe",
                 "-fexec-charset=GBK"
             ],
             "options": {

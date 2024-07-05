@@ -4,7 +4,7 @@
             "name": "C/C++: g++.exe 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\a.exe",
+            "program": "${fileDirname}\\library.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
