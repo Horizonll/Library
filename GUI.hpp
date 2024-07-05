@@ -1,0 +1,441 @@
+#include "class.hpp"
+#include <conio.h>
+using namespace std;
+class GUI
+{
+public:
+    void ShowMenu()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                           图书管理系统" << endl;
+        cout << "                        -----------------" << endl;
+        cout << "                        1. 添加书籍" << endl;
+        cout << "                        2. 删除书籍" << endl;
+        cout << "                        3. 查找书籍" << endl;
+        cout << "                        4. 编辑书籍" << endl;
+        cout << "                        5. 添加用户" << endl;
+        cout << "                        6. 删除用户" << endl;
+        cout << "                        7. 查找用户" << endl;
+        cout << "                        8. 编辑用户" << endl;
+        cout << "                        9. 借书" << endl;
+        cout << "                        10. 还书" << endl;
+        cout << "                        11. 查看借阅记录" << endl;
+        cout << "                        12. 退出" << endl;
+    }
+    void DisplayBook(Book book)
+    {
+        cout << "                        书名：" << book.title << endl;
+        cout << "                        作者：" << book.author << endl;
+        cout << "                        分类：" << book.category << endl;
+        cout << "                        关键词：" << book.keywords << endl;
+        cout << "                        简介：" << book.summary << endl;
+        cout << "                        是否借出：" << book.isBorrowed << endl;
+        cout << "                        借阅次数：" << book.borrowTimes << endl;
+    }
+    void AddBook()
+    {
+        system("cls");
+        Book book;
+        cout << endl;
+        cout << endl;
+        cout << "                        添加书籍" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入书名：";
+        cin.ignore();
+        getline(cin, book.title);
+        cout << "                        请输入作者：";
+        getline(cin, book.author);
+        cout << "                        请输入分类：";
+        getline(cin, book.category);
+        cout << "                        请输入关键词：";
+        getline(cin, book.keywords);
+        cout << "                        请输入简介：";
+        getline(cin, book.summary);
+        cout << endl;
+        int result = book.addBook();
+        switch (result)
+        {
+        case 0:
+            cout << "                        书籍已存在" << endl;
+            break;
+        case -1:
+            cout << "                        保存失败" << endl;
+            break;
+        case 1:
+            cout << "                        保存成功" << endl;
+            break;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void DeleteBook()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        删除书籍" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入书名：";
+        string title;
+        cin.ignore();
+        getline(cin, title);
+        cout << endl;
+        Book book(title);
+        int result = book.deleteBook();
+        switch (result)
+        {
+        case 0:
+            cout << "                        书籍不存在" << endl;
+            break;
+        case 1:
+            cout << "                        删除成功" << endl;
+            break;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void SearchBook()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        查找书籍" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入搜索词：";
+        string title;
+        cin.ignore();
+        getline(cin, title);
+        cout << endl;
+        cout << "                        查询结果" << endl;
+        cout << endl;
+        vector<Book> books = searchBook(title);
+        int result = books.size() == 0 ? 0 : 1;
+        switch (result)
+        {
+        case 0:
+            cout << "                        书籍不存在" << endl;
+            break;
+        case 1:
+            for (int i = 0; i < books.size(); i++)
+            {
+                cout << "                        书籍" << i + 1 << endl;
+                DisplayBook(books[i]);
+                cout << endl;
+            }
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void EditBook()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        编辑书籍" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入书名：";
+        string title;
+        cin.ignore();
+        getline(cin, title);
+        cout << endl;
+        Book book = getBook(title);
+        int result = book.title.empty() ? 0 : 1;
+        switch (result)
+        {
+        case 0:
+            cout << "                        书籍不存在" << endl;
+            break;
+        case 1:
+            DisplayBook(book);
+            book.deleteBook();
+            cout << endl;
+            cout << endl;
+            cout << "                        请输入新书名：";
+            cin.ignore();
+            getline(cin, book.title);
+            cout << "                        请输入新作者：";
+            getline(cin, book.author);
+            cout << "                        请输入新分类：";
+            getline(cin, book.category);
+            cout << "                        请输入新关键词：";
+            getline(cin, book.keywords);
+            cout << "                        请输入新简介：";
+            getline(cin, book.summary);
+            cout << endl;
+            int result = book.editBook();
+            switch (result)
+            {
+            case -1:
+                cout << "                        保存失败" << endl;
+                break;
+            case 1:
+                cout << "                        保存成功" << endl;
+                break;
+            }
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void AddUser()
+    {
+        system("cls");
+        User user;
+        cout << endl;
+        cout << endl;
+        cout << "                        添加用户" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入用户名：";
+        cin.ignore();
+        getline(cin, user.name);
+        cout << endl;
+        int result = user.addUser();
+        switch (result)
+        {
+        case 0:
+            cout << "                        用户已存在" << endl;
+            break;
+        case -1:
+            cout << "                        保存失败" << endl;
+            break;
+        case 1:
+            cout << "                        保存成功" << endl;
+            break;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void DeleteUser()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        删除用户" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入用户名：";
+        string name;
+        cin.ignore();
+        getline(cin, name);
+        cout << endl;
+        User user(name);
+        int result = user.deleteUser();
+        switch (result)
+        {
+        case 0:
+            cout << "                        用户不存在" << endl;
+            break;
+        case 1:
+            cout << "                        删除成功" << endl;
+            break;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void SearchUser()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        查找用户" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入用户名：";
+        string name;
+        cin.ignore();
+        getline(cin, name);
+        cout << endl;
+        cout << "                        查询结果" << endl;
+        cout << endl;
+        vector<User> users = searchUser(name);
+        int result = users.size() == 0 ? 0 : 1;
+        switch (result)
+        {
+        case 0:
+            cout << "                        用户不存在" << endl;
+            break;
+        case 1:
+            for (int i = 0; i < users.size(); i++)
+            {
+                cout << "                        用户" << i + 1 << endl;
+                cout << "                        用户名：" << users[i].name << endl;
+                cout << endl;
+            }
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void EditUser()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        编辑用户" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入用户名：";
+        string oldname;
+        cin.ignore();
+        getline(cin, oldname);
+        cout << endl;
+        User user = getUser(oldname);
+        int result = user.name.empty() ? 0 : 1;
+        switch (result)
+        {
+        case 0:
+            cout << "                        用户不存在" << endl;
+            break;
+        case 1:
+            cout << endl;
+            cout << endl;
+            cout << "                        请输入新用户名：";
+            cin.ignore();
+            getline(cin, user.name);
+            cout << endl;
+            int result = user.editUser(oldname);
+            switch (result)
+            {
+            case -1:
+                cout << "                        保存失败" << endl;
+                break;
+            case 1:
+                cout << "                        保存成功" << endl;
+                break;
+            }
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void BorrowBook()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        借书" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入书名：";
+        string title;
+        cin.ignore();
+        getline(cin, title);
+        cout << "                        请输入用户名：";
+        string name;
+        getline(cin, name);
+        int result = borrowBook(name, title);
+        switch (result)
+        {
+        case 0:
+            cout << "                        书籍不存在" << endl;
+            break;
+        case -1:
+            cout << "                        书籍已借出" << endl;
+            break;
+        case -2:
+            cout << "                        用户不存在" << endl;
+            break;
+        case 1:
+            cout << "                        借书成功" << endl;
+            break;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void ReturnBook()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        还书" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入书名：";
+        string title;
+        cin.ignore();
+        getline(cin, title);
+        cout << "                        请输入用户名：";
+        string name;
+        getline(cin, name);
+        int result = returnBook(name, title);
+        switch (result)
+        {
+        case 0:
+            cout << "                        书籍不存在" << endl;
+            break;
+        case -1:
+            cout << "                        未借此书籍" << endl;
+            break;
+        case -2:
+            cout << "                        用户不存在" << endl;
+            break;
+        case 1:
+            cout << "                        还书成功" << endl;
+            break;
+        case -3:
+            cout << "                        用户未借过此书" << endl;
+            break;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void BorrowRecord()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        查看借阅记录" << endl;
+        cout << endl;
+        cout << endl;
+        cout << "                        请输入用户名：";
+        string name;
+        cin.ignore();
+        getline(cin, name);
+        cout << endl;
+        User user = getUser(name);
+        int result = user.name.empty() ? 0 : 1;
+        switch (result)
+        {
+        case 0:
+            cout << "                        用户不存在" << endl;
+            break;
+        case 1:
+            cout << "                        借阅次数：" << user.borrowTimes << endl;
+            cout << endl;
+            cout << "                        借阅记录：" << endl;
+            cout << endl;
+            for (auto record : user.borrowRecords)
+            {
+                cout << "                        书名：" << record.bookName << endl;
+                cout << "                        借书时间：" << record.borrowTime << endl;
+                cout << "                        还书时间：" << record.returnTime << endl;
+                cout << endl;
+            }
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    void Exit()
+    {
+        exit(0);
+    }
+    void Error()
+    {
+        cout << "                        无效输入" << endl;
+    }
+};
