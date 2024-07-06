@@ -33,7 +33,14 @@ public:
         cout << "                        分类：" << book.category << endl;
         cout << "                        关键词：" << book.keywords << endl;
         cout << "                        简介：" << book.summary << endl;
-        cout << "                        是否借出：" << book.isBorrowed << endl;
+        if (book.isBorrowed == 1)
+        {
+            cout << "                        借出状态：已借出" << endl;
+        }
+        else
+        {
+            cout << "                        借出状态：未借出" << endl;
+        }
         cout << "                        借阅次数：" << book.borrowTimes << endl;
     }
 
@@ -125,12 +132,20 @@ public:
             getch();
             return;
         }
+        if (getBook(title).title.empty())
+        {
+            cout << "                        书籍不存在" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         Book book(title);
         int result = book.deleteBook();
         switch (result)
         {
-        case 0:
-            cout << "                        书籍不存在" << endl;
+        case -1:
+            cout << "                        删除失败" << endl;
             break;
         case 1:
             cout << "                        删除成功" << endl;
@@ -396,8 +411,6 @@ public:
             cout << "                        用户不存在" << endl;
             break;
         case 1:
-            cout << endl;
-            cout << endl;
             cout << "                        请输入新用户名：";
             getline(cin, user.name);
             user.name = RemoveBlank(user.name);
@@ -576,7 +589,14 @@ public:
             {
                 cout << "                        书名：" << record.bookName << endl;
                 cout << "                        借书时间：" << record.borrowTime << endl;
-                cout << "                        还书时间：" << record.returnTime << endl;
+                if (record.returnTime == "")
+                {
+                    cout << "                        还书时间：未还" << endl;
+                }
+                else
+                {
+                    cout << "                        还书时间：" << record.returnTime << endl;
+                }
                 cout << endl;
             }
         }

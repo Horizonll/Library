@@ -58,16 +58,12 @@ public:
     {
         string filePath = "./data/book/" + this->title + ".txt";
         if (ifstream(filePath))
-        {
             return 0;
-        }
         else
         {
             ofstream file(filePath);
             if (!file)
-            {
                 return -1;
-            }
             else
             {
                 file << this->title << endl;
@@ -100,23 +96,17 @@ public:
     int deleteBook()
     {
         string filePath = "./data/book/" + this->title + ".txt";
-        if (remove(filePath.c_str()) != 0)
-        {
-            return 0;
-        }
-        else
-        {
+        if (remove(filePath.c_str()) == 0)
             return 1;
-        }
+        else
+            return -1;
     }
 
     int editBook()
     {
         ofstream file("./data/book/" + this->title + ".txt");
         if (!file)
-        {
             return -1;
-        }
         else
         {
             this->saveBook();
@@ -130,16 +120,12 @@ Book getBook(string title)
 {
     string filePath = "./data/book/" + title + ".txt";
     if (!ifstream(filePath))
-    {
         return Book();
-    }
     else
     {
         ifstream file(filePath);
         if (!file)
-        {
             return Book();
-        }
         else
         {
             Book book;
@@ -182,10 +168,12 @@ vector<Book> searchBook(string keyword)
             book.borrowTimes = stoi(line);
             file.close();
 
-            if (book.title.find(keyword) != string::npos || book.author.find(keyword) != string::npos || book.category.find(keyword) != string::npos || book.keywords.find(keyword) != string::npos || book.summary.find(keyword) != string::npos)
-            {
+            if (book.title.find(keyword) != string::npos ||
+                book.author.find(keyword) != string::npos ||
+                book.category.find(keyword) != string::npos ||
+                book.keywords.find(keyword) != string::npos ||
+                book.summary.find(keyword) != string::npos)
                 results.push_back(book);
-            }
         }
     }
     return results;
@@ -228,16 +216,12 @@ public:
     {
         string filePath = "./data/user/" + this->name + ".txt";
         if (ifstream(filePath))
-        {
             return 0;
-        }
         else
         {
             ofstream file(filePath);
             if (!file)
-            {
                 return -1;
-            }
             else
             {
                 file.close();
@@ -251,26 +235,18 @@ public:
         string oldfilePath = "./data/user/" + oldname + ".txt";
         string newfilePath = "./data/user/" + this->name + ".txt";
         if (rename(oldfilePath.c_str(), newfilePath.c_str()) != 0)
-        {
             return 0;
-        }
         else
-        {
             return 1;
-        }
     }
 
     int deleteUser()
     {
         string filePath = "./data/user/" + this->name + ".txt";
         if (remove(filePath.c_str()) == 0)
-        {
-            return -1;
-        }
-        else
-        {
             return 1;
-        }
+        else
+            return -1;
     }
 };
 
@@ -278,16 +254,12 @@ User getUser(string name)
 {
     string filePath = "./data/user/" + name + ".txt";
     if (!ifstream(filePath))
-    {
         return User();
-    }
     else
     {
         ifstream file(filePath);
         if (!file)
-        {
             return User();
-        }
         else
         {
             User user(name);
@@ -340,9 +312,7 @@ vector<User> searchUser(string keyword)
             file.close();
 
             if (user.name.find(keyword) != string::npos)
-            {
                 results.push_back(user);
-            }
         }
     }
     return results;
@@ -352,18 +322,12 @@ int borrowBook(string userName, string bookName)
 {
     Book book = getBook(bookName);
     if (book.title == "")
-    {
         return 0;
-    }
     User user = getUser(userName);
     if (user.name == "")
-    {
         return -2;
-    }
     if (book.isBorrowed)
-    {
         return -1;
-    }
     Record record;
     record.bookName = bookName;
     record.borrowTime = getCurrentDateTime();
@@ -381,14 +345,10 @@ int returnBook(string userName, string bookName)
 {
     Book book = getBook(bookName);
     if (book.title == "")
-    {
         return 0;
-    }
     User user = getUser(userName);
     if (user.name == "")
-    {
         return -2;
-    }
     bool found = false;
     bool isBorrowed = false;
     for (auto &record : user.borrowRecords)
@@ -403,13 +363,9 @@ int returnBook(string userName, string bookName)
         }
     }
     if (!found)
-    {
         return -1;
-    }
     if (!isBorrowed)
-    {
         return -3;
-    }
     user.saveRecords();
     book.isBorrowed = false;
     book.saveBook();

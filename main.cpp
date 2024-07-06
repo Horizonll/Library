@@ -1,5 +1,6 @@
 #include "GUI.hpp"
 #include <unistd.h>
+#include <algorithm>
 
 enum Choice
 {
@@ -19,30 +20,23 @@ enum Choice
 
 bool IsPureNumber(const string &input)
 {
-    for (char c : input)
-    {
-        if (c < '0' || c > '9')
-        {
-            return false;
-        }
-    }
-    return true;
+    return all_of(input.begin(), input.end(), ::isdigit);
 }
 
 int main()
 {
     if (!filesystem::exists("./data/book/"))
-    {
         filesystem::create_directories("./data/book/");
-    }
+
     if (!filesystem::exists("./data/user/"))
-    {
         filesystem::create_directories("./data/user/");
-    }
+
     GUI gui;
+
     while (true)
     {
         gui.ShowMenu();
+
         string input;
         int choice;
         getline(cin, input);
@@ -53,6 +47,7 @@ int main()
             continue;
         }
         choice = stoi(input);
+
         switch (choice)
         {
         case AddBook:
