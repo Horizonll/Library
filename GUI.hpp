@@ -46,9 +46,11 @@ public:
 
     string RemoveBlank(string str)
     {
-        str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
-        str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
-        return str;
+        auto start = str.find_first_not_of(" \t\n\r\f\v");
+        if (start == string::npos)
+            return "";
+        auto end = str.find_last_not_of(" \t\n\r\f\v");
+        return str.substr(start, end - start + 1);
     }
 
     void AddBook()
