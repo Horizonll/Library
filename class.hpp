@@ -1,6 +1,4 @@
-#include <iostream>
 #include <fstream>
-#include <string>
 #include <vector>
 #include <filesystem>
 
@@ -216,21 +214,14 @@ public:
     {
         string filePath = "./data/user/" + this->name + ".txt";
         ofstream file(filePath);
-        if (!file)
+        for (auto record : this->borrowRecords)
         {
-            cout << "保存失败" << endl;
+            file << record.bookName << endl;
+            file << record.borrowTime << endl;
+            file << record.returnTime << endl;
+            file << record.isReturned << endl;
         }
-        else
-        {
-            for (auto record : this->borrowRecords)
-            {
-                file << record.bookName << endl;
-                file << record.borrowTime << endl;
-                file << record.returnTime << endl;
-                file << record.isReturned << endl;
-            }
-            file.close();
-        }
+        file.close();
     }
 
     int addUser()
@@ -274,7 +265,7 @@ public:
         string filePath = "./data/user/" + this->name + ".txt";
         if (remove(filePath.c_str()) == 0)
         {
-            return 0;
+            return -1;
         }
         else
         {

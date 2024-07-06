@@ -1,6 +1,7 @@
 #include "class.hpp"
 #include <conio.h>
-using namespace std;
+#include <iostream>
+
 class GUI
 {
 public:
@@ -50,13 +51,20 @@ public:
         cout << endl;
         cout << endl;
         cout << "                        请输入书名：";
-        cin.ignore();
         getline(cin, book.title);
         book.title = RemoveBlank(book.title);
         if (book.title.empty())
         {
             cout << endl;
             cout << "                        书名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
+        else if (getBook(book.title).title == book.title)
+        {
+            cout << "                        书籍已存在" << endl;
             cout << endl;
             cout << "                        按任意键返回" << endl;
             getch();
@@ -102,7 +110,6 @@ public:
         cout << endl;
         cout << "                        请输入书名：";
         string title;
-        cin.ignore();
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -139,7 +146,6 @@ public:
         cout << endl;
         cout << "                        请输入搜索词（回车显示所有书籍）：";
         string title;
-        cin.ignore();
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -174,7 +180,6 @@ public:
         cout << endl;
         cout << "                        请输入书名：";
         string title;
-        cin.ignore();
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -248,7 +253,7 @@ public:
         cout << endl;
         cout << endl;
         cout << "                        请输入用户名：";
-        cin.ignore();
+
         getline(cin, user.name);
         user.name = RemoveBlank(user.name);
         cout << endl;
@@ -287,7 +292,6 @@ public:
         cout << endl;
         cout << "                        请输入用户名：";
         string name;
-        cin.ignore();
         getline(cin, name);
         name = RemoveBlank(name);
         cout << endl;
@@ -299,15 +303,23 @@ public:
             getch();
             return;
         }
+        if (getUser(name).name.empty())
+        {
+            cout << "                        用户不存在" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         User user(name);
         int result = user.deleteUser();
         switch (result)
         {
-        case 0:
-            cout << "                        用户不存在" << endl;
-            break;
         case 1:
             cout << "                        删除成功" << endl;
+            break;
+        case -1:
+            cout << "                        删除失败" << endl;
             break;
         }
         cout << endl;
@@ -324,7 +336,7 @@ public:
         cout << endl;
         cout << "                        请输入用户名（回车显示所有用户）：";
         string name;
-        cin.ignore();
+
         getline(cin, name);
         cout << endl;
         cout << "                        查询结果" << endl;
@@ -339,8 +351,7 @@ public:
         case 1:
             for (int i = 0; i < users.size(); i++)
             {
-                cout << "                        用户" << i + 1 << endl;
-                cout << "                        用户名：" << users[i].name << endl;
+                cout << "                        用户" << i + 1 << "：" << users[i].name << endl;
                 cout << endl;
             }
         }
@@ -358,7 +369,7 @@ public:
         cout << endl;
         cout << "                        请输入用户名：";
         string oldname;
-        cin.ignore();
+
         getline(cin, oldname);
         oldname = RemoveBlank(oldname);
         cout << endl;
@@ -381,7 +392,7 @@ public:
             cout << endl;
             cout << endl;
             cout << "                        请输入新用户名：";
-            cin.ignore();
+
             getline(cin, user.name);
             user.name = RemoveBlank(user.name);
             cout << endl;
@@ -418,7 +429,7 @@ public:
         cout << endl;
         cout << "                        请输入书名：";
         string title;
-        cin.ignore();
+
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -473,7 +484,7 @@ public:
         cout << endl;
         cout << "                        请输入书名：";
         string title;
-        cin.ignore();
+
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -531,7 +542,7 @@ public:
         cout << endl;
         cout << "                        请输入用户名：";
         string name;
-        cin.ignore();
+
         getline(cin, name);
         name = RemoveBlank(name);
         cout << endl;
@@ -573,6 +584,6 @@ public:
     }
     void Error()
     {
-        cout << "                        无效输入" << endl;
+        cout << "                        无效输入，1秒后请重新输入" << endl;
     }
 };
