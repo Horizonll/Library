@@ -25,6 +25,7 @@ public:
         cout << "                        11. 查看借阅记录" << endl;
         cout << "                        12. 退出" << endl;
     }
+
     void DisplayBook(Book book)
     {
         cout << "                        书名：" << book.title << endl;
@@ -35,12 +36,14 @@ public:
         cout << "                        是否借出：" << book.isBorrowed << endl;
         cout << "                        借阅次数：" << book.borrowTimes << endl;
     }
+
     string RemoveBlank(string str)
     {
         str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
         str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
         return str;
     }
+
     void AddBook()
     {
         system("cls");
@@ -100,6 +103,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void DeleteBook()
     {
         system("cls");
@@ -136,6 +140,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void SearchBook()
     {
         system("cls");
@@ -170,6 +175,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void EditBook()
     {
         system("cls");
@@ -243,6 +249,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void AddUser()
     {
         system("cls");
@@ -253,7 +260,6 @@ public:
         cout << endl;
         cout << endl;
         cout << "                        请输入用户名：";
-
         getline(cin, user.name);
         user.name = RemoveBlank(user.name);
         cout << endl;
@@ -282,6 +288,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void DeleteUser()
     {
         system("cls");
@@ -326,6 +333,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void SearchUser()
     {
         system("cls");
@@ -336,7 +344,6 @@ public:
         cout << endl;
         cout << "                        请输入用户名（回车显示所有用户）：";
         string name;
-
         getline(cin, name);
         cout << endl;
         cout << "                        查询结果" << endl;
@@ -359,6 +366,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void EditUser()
     {
         system("cls");
@@ -369,7 +377,6 @@ public:
         cout << endl;
         cout << "                        请输入用户名：";
         string oldname;
-
         getline(cin, oldname);
         oldname = RemoveBlank(oldname);
         cout << endl;
@@ -392,7 +399,6 @@ public:
             cout << endl;
             cout << endl;
             cout << "                        请输入新用户名：";
-
             getline(cin, user.name);
             user.name = RemoveBlank(user.name);
             cout << endl;
@@ -419,6 +425,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void BorrowBook()
     {
         system("cls");
@@ -429,7 +436,6 @@ public:
         cout << endl;
         cout << "                        请输入书名：";
         string title;
-
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -474,6 +480,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void ReturnBook()
     {
         system("cls");
@@ -484,7 +491,6 @@ public:
         cout << endl;
         cout << "                        请输入书名：";
         string title;
-
         getline(cin, title);
         title = RemoveBlank(title);
         cout << endl;
@@ -532,6 +538,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
     void BorrowRecord()
     {
         system("cls");
@@ -542,7 +549,6 @@ public:
         cout << endl;
         cout << "                        请输入用户名：";
         string name;
-
         getline(cin, name);
         name = RemoveBlank(name);
         cout << endl;
@@ -564,7 +570,7 @@ public:
         case 1:
             cout << "                        借阅次数：" << user.borrowTimes << endl;
             cout << endl;
-            cout << "                        借阅记录：" << endl;
+            cout << "                        借阅记录" << endl;
             cout << endl;
             for (auto record : user.borrowRecords)
             {
