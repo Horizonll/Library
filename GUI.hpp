@@ -34,6 +34,12 @@ public:
         cout << "                        是否借出：" << book.isBorrowed << endl;
         cout << "                        借阅次数：" << book.borrowTimes << endl;
     }
+    string RemoveBlank(string str)
+    {
+        str.erase(0, str.find_first_not_of(" \t\n\r\f\v"));
+        str.erase(str.find_last_not_of(" \t\n\r\f\v") + 1);
+        return str;
+    }
     void AddBook()
     {
         system("cls");
@@ -46,14 +52,28 @@ public:
         cout << "                        请输入书名：";
         cin.ignore();
         getline(cin, book.title);
+        book.title = RemoveBlank(book.title);
+        if (book.title.empty())
+        {
+            cout << endl;
+            cout << "                        书名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         cout << "                        请输入作者：";
         getline(cin, book.author);
+        book.author = RemoveBlank(book.author);
         cout << "                        请输入分类：";
         getline(cin, book.category);
+        book.category = RemoveBlank(book.category);
         cout << "                        请输入关键词：";
         getline(cin, book.keywords);
+        book.keywords = RemoveBlank(book.keywords);
         cout << "                        请输入简介：";
         getline(cin, book.summary);
+        book.summary = RemoveBlank(book.summary);
         cout << endl;
         int result = book.addBook();
         switch (result)
@@ -84,7 +104,16 @@ public:
         string title;
         cin.ignore();
         getline(cin, title);
+        title = RemoveBlank(title);
         cout << endl;
+        if (title.empty())
+        {
+            cout << "                        书名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         Book book(title);
         int result = book.deleteBook();
         switch (result)
@@ -108,10 +137,11 @@ public:
         cout << "                        查找书籍" << endl;
         cout << endl;
         cout << endl;
-        cout << "                        请输入搜索词：";
+        cout << "                        请输入搜索词（回车显示所有书籍）：";
         string title;
         cin.ignore();
         getline(cin, title);
+        title = RemoveBlank(title);
         cout << endl;
         cout << "                        查询结果" << endl;
         cout << endl;
@@ -146,31 +176,53 @@ public:
         string title;
         cin.ignore();
         getline(cin, title);
+        title = RemoveBlank(title);
         cout << endl;
-        Book book = getBook(title);
-        int result = book.title.empty() ? 0 : 1;
+        if (title.empty())
+        {
+            cout << "                        书名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
+        Book oldBook = getBook(title);
+        int result = oldBook.title.empty() ? 0 : 1;
         switch (result)
         {
         case 0:
             cout << "                        书籍不存在" << endl;
             break;
         case 1:
-            DisplayBook(book);
-            book.deleteBook();
-            cout << endl;
+            DisplayBook(oldBook);
+            Book book;
             cout << endl;
             cout << "                        请输入新书名：";
-            cin.ignore();
             getline(cin, book.title);
+            book.title = RemoveBlank(book.title);
+            if (book.title.empty())
+            {
+                cout << endl;
+                cout << "                        书名不能为空" << endl;
+                cout << endl;
+                cout << "                        按任意键返回" << endl;
+                getch();
+                return;
+            }
             cout << "                        请输入新作者：";
             getline(cin, book.author);
+            book.author = RemoveBlank(book.author);
             cout << "                        请输入新分类：";
             getline(cin, book.category);
+            book.category = RemoveBlank(book.category);
             cout << "                        请输入新关键词：";
             getline(cin, book.keywords);
+            book.keywords = RemoveBlank(book.keywords);
             cout << "                        请输入新简介：";
             getline(cin, book.summary);
+            book.summary = RemoveBlank(book.summary);
             cout << endl;
+            oldBook.deleteBook();
             int result = book.editBook();
             switch (result)
             {
@@ -198,7 +250,16 @@ public:
         cout << "                        请输入用户名：";
         cin.ignore();
         getline(cin, user.name);
+        user.name = RemoveBlank(user.name);
         cout << endl;
+        if (user.name.empty())
+        {
+            cout << "                        用户名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         int result = user.addUser();
         switch (result)
         {
@@ -228,7 +289,16 @@ public:
         string name;
         cin.ignore();
         getline(cin, name);
+        name = RemoveBlank(name);
         cout << endl;
+        if (name.empty())
+        {
+            cout << "                        用户名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         User user(name);
         int result = user.deleteUser();
         switch (result)
@@ -252,7 +322,7 @@ public:
         cout << "                        查找用户" << endl;
         cout << endl;
         cout << endl;
-        cout << "                        请输入用户名：";
+        cout << "                        请输入用户名（回车显示所有用户）：";
         string name;
         cin.ignore();
         getline(cin, name);
@@ -290,7 +360,16 @@ public:
         string oldname;
         cin.ignore();
         getline(cin, oldname);
+        oldname = RemoveBlank(oldname);
         cout << endl;
+        if (oldname.empty())
+        {
+            cout << "                        用户名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         User user = getUser(oldname);
         int result = user.name.empty() ? 0 : 1;
         switch (result)
@@ -304,7 +383,16 @@ public:
             cout << "                        请输入新用户名：";
             cin.ignore();
             getline(cin, user.name);
+            user.name = RemoveBlank(user.name);
             cout << endl;
+            if (user.name.empty())
+            {
+                cout << "                        用户名不能为空" << endl;
+                cout << endl;
+                cout << "                        按任意键返回" << endl;
+                getch();
+                return;
+            }
             int result = user.editUser(oldname);
             switch (result)
             {
@@ -332,9 +420,29 @@ public:
         string title;
         cin.ignore();
         getline(cin, title);
+        title = RemoveBlank(title);
+        cout << endl;
+        if (title.empty())
+        {
+            cout << "                        书名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         cout << "                        请输入用户名：";
         string name;
         getline(cin, name);
+        name = RemoveBlank(name);
+        cout << endl;
+        if (name.empty())
+        {
+            cout << "                        用户名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         int result = borrowBook(name, title);
         switch (result)
         {
@@ -367,9 +475,29 @@ public:
         string title;
         cin.ignore();
         getline(cin, title);
+        title = RemoveBlank(title);
+        cout << endl;
+        if (title.empty())
+        {
+            cout << "                        书名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         cout << "                        请输入用户名：";
         string name;
         getline(cin, name);
+        name = RemoveBlank(name);
+        cout << endl;
+        if (name.empty())
+        {
+            cout << "                        用户名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         int result = returnBook(name, title);
         switch (result)
         {
@@ -405,7 +533,16 @@ public:
         string name;
         cin.ignore();
         getline(cin, name);
+        name = RemoveBlank(name);
         cout << endl;
+        if (name.empty())
+        {
+            cout << "                        用户名不能为空" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         User user = getUser(name);
         int result = user.name.empty() ? 0 : 1;
         switch (result)

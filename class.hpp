@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include <ctime>
 
 using namespace std;
 
@@ -111,17 +110,6 @@ public:
         {
             return 1;
         }
-    }
-
-    void displayBook()
-    {
-        cout << this->title << endl;
-        cout << this->author << endl;
-        cout << this->category << endl;
-        cout << this->keywords << endl;
-        cout << this->summary << endl;
-        cout << this->isBorrowed << endl;
-        cout << this->borrowTimes << endl;
     }
 
     int editBook()
