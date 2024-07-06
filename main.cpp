@@ -1,5 +1,5 @@
 #include "GUI.hpp"
-#include <iostream>
+
 enum Choice
 {
     AddBook = 1,
@@ -15,8 +15,17 @@ enum Choice
     BorrowRecord,
     Exit
 };
+
 int main()
 {
+    if (!filesystem::exists("./data/book/"))
+    {
+        filesystem::create_directories("./data/book/");
+    }
+    if (!filesystem::exists("./data/user/"))
+    {
+        filesystem::create_directories("./data/user/");
+    }
     GUI gui;
     while (true)
     {
