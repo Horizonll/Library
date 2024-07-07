@@ -618,6 +618,14 @@ public:
         cout << endl;
         cout << endl;
         vector<Book> books = tenHotBooks();
+        if (books.size() == 0)
+        {
+            cout << "                        无借阅记录" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         for (int i = 0; i < books.size(); i++)
         {
             cout << "                        书籍" << i + 1 << endl;
@@ -638,6 +646,14 @@ public:
         cout << endl;
         cout << endl;
         vector<User> users = tenActiveUsers();
+        if (users.size() == 0)
+        {
+            cout << "                        无借阅记录" << endl;
+            cout << endl;
+            cout << "                        按任意键返回" << endl;
+            getch();
+            return;
+        }
         for (int i = 0; i < users.size(); i++)
         {
             cout << "                        用户" << i + 1 << "：" << users[i].name << endl;
@@ -648,7 +664,7 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
-    
+
     void Exit()
     {
         exit(0);
