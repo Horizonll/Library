@@ -28,26 +28,26 @@ int main()
 {
     if (!filesystem::exists("./data/book/"))
         filesystem::create_directories("./data/book/");
-
     if (!filesystem::exists("./data/user/"))
         filesystem::create_directories("./data/user/");
 
     GUI gui;
+    bool error = false;
 
     while (true)
     {
         gui.ShowMenu();
+        if (error)
+            gui.Error();
 
         string input;
         int choice;
         getline(cin, input);
-        if (!IsPureNumber(input) || input.empty())
+        if (!IsPureNumber(input) || input.empty() || (choice = stoi(input)) > Exit || choice < AddBook)
         {
-            gui.Error();
-            sleep(1);
+            error = true;
             continue;
         }
-        choice = stoi(input);
 
         switch (choice)
         {
@@ -93,11 +93,8 @@ int main()
         case Exit:
             gui.Exit();
             return 0;
-        default:
-            gui.Error();
-            sleep(1);
-            break;
         }
+        error = false;
     }
     return 0;
 }

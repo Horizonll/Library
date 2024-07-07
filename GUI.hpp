@@ -671,6 +671,6 @@ public:
     }
     void Error()
     {
-        cout << "                        无效输入，1秒后请重新输入" << endl;
+        cout << "                        无效输入，请重新输入" << endl;
     }
 };
