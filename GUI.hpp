@@ -26,6 +26,9 @@ public:
         cout << "                        12. 十大热门书籍" << endl;
         cout << "                        13. 十大活跃用户" << endl;
         cout << "                        14. 退出" << endl;
+        cout << "                        -----------------" << endl;
+        cout << endl;
+        cout << "                        请选择操作：";
     }
 
     void DisplayBook(Book book)
@@ -671,6 +674,7 @@ public:
     }
     void Error()
     {
+        cout << endl;
         cout << "                        无效输入，请重新输入" << endl;
     }
 };
