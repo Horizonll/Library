@@ -9,7 +9,7 @@
                 "${file}",
                 "-o",
                 "${fileDirname}\\library.exe",
-                "-fexec-charset=GBK"
+                "-fexec-charset=UTF-8"
             ],
             "options": {
                 "cwd": "${fileDirname}"

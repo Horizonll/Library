@@ -2,6 +2,7 @@
 #include <vector>
 #include <filesystem>
 #include <algorithm>
+#include <iconv.h>
 
 using namespace std;
 
@@ -12,6 +13,29 @@ string getCurrentDateTime()
     char buffer[80];
     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ltm);
     return buffer;
+}
+
+string utf8_to_gbk(const string &utf8_str)
+{
+    iconv_t cd = iconv_open("GBK", "UTF-8");
+    if (cd == (iconv_t)-1)
+    {
+        return "";
+    }
+    size_t in_bytes_left = utf8_str.size();
+    size_t out_bytes_left = in_bytes_left * 2;
+    char *in_buf = const_cast<char *>(utf8_str.c_str());
+    char out_buf[out_bytes_left];
+    char *out_buf_start = out_buf;
+    size_t ret = iconv(cd, &in_buf, &in_bytes_left, &out_buf_start, &out_bytes_left);
+    if (ret == (size_t)-1)
+    {
+        iconv_close(cd);
+        return "";
+    }
+    *out_buf_start = '\0';
+    iconv_close(cd);
+    return string(out_buf);
 }
 
 struct Record
@@ -41,7 +65,7 @@ public:
 
     int addBook()
     {
-        string filePath = "./data/book/" + this->title + ".txt";
+        string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         if (ifstream(filePath))
             return 0;
         else
@@ -66,7 +90,7 @@ public:
 
     void saveBook()
     {
-        string filePath = "./data/book/" + this->title + ".txt";
+        string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         ofstream file(filePath);
         file << this->title << endl;
         file << this->author << endl;
@@ -80,7 +104,7 @@ public:
 
     int deleteBook()
     {
-        string filePath = "./data/book/" + this->title + ".txt";
+        string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         if (remove(filePath.c_str()) == 0)
             return 1;
         else
@@ -89,7 +113,7 @@ public:
 
     int editBook()
     {
-        ofstream file("./data/book/" + this->title + ".txt");
+        ofstream file("./data/book/" + utf8_to_gbk(this->title) + ".txt");
         if (!file)
             return -1;
         else
@@ -103,7 +127,7 @@ public:
 
 Book getBook(string title)
 {
-    string filePath = "./data/book/" + title + ".txt";
+    string filePath = "./data/book/" + utf8_to_gbk(title) + ".txt";
     if (!ifstream(filePath))
         return Book();
     else
@@ -137,6 +161,7 @@ vector<Book> searchBook(string keyword)
     for (const auto &entry : filesystem::directory_iterator(directory))
     {
         string filePath = entry.path().string();
+        filePath = utf8_to_gbk(filePath);
         ifstream file(filePath);
         if (file)
         {
@@ -211,7 +236,7 @@ public:
 
     void saveRecords()
     {
-        string filePath = "./data/user/" + this->name + ".txt";
+        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         ofstream file(filePath);
         for (auto record : this->borrowRecords)
         {
@@ -225,7 +250,7 @@ public:
 
     int addUser()
     {
-        string filePath = "./data/user/" + this->name + ".txt";
+        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (ifstream(filePath))
             return 0;
         else
@@ -243,8 +268,8 @@ public:
 
     int editUser(string oldname)
     {
-        string oldfilePath = "./data/user/" + oldname + ".txt";
-        string newfilePath = "./data/user/" + this->name + ".txt";
+        string oldfilePath = "./data/user/" + utf8_to_gbk(oldname) + ".txt";
+        string newfilePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (rename(oldfilePath.c_str(), newfilePath.c_str()) != 0)
             return 0;
         else
@@ -253,7 +278,7 @@ public:
 
     int deleteUser()
     {
-        string filePath = "./data/user/" + this->name + ".txt";
+        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (remove(filePath.c_str()) == 0)
             return 1;
         else
@@ -263,7 +288,7 @@ public:
 
 User getUser(string name)
 {
-    string filePath = "./data/user/" + name + ".txt";
+    string filePath = "./data/user/" + utf8_to_gbk(name) + ".txt";
     if (!ifstream(filePath))
         return User();
     else

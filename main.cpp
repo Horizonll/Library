@@ -30,10 +30,9 @@ int main()
         filesystem::create_directories("./data/book/");
     if (!filesystem::exists("./data/user/"))
         filesystem::create_directories("./data/user/");
-
     GUI gui;
     bool error = false;
-
+    system("chcp 65001");
     while (true)
     {
         gui.ShowMenu();
