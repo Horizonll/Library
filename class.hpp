@@ -36,6 +36,27 @@ string utf8_to_gbk(const string &utf8_str)
     return string(out_buf);
 }
 
+string gbk_to_utf8(const string &gbk_str)
+{
+    iconv_t cd = iconv_open("UTF-8", "GBK");
+    if (cd == (iconv_t)-1)
+        return "";
+    size_t in_bytes_left = gbk_str.size();
+    size_t out_bytes_left = in_bytes_left * 2;
+    char *in_buf = const_cast<char *>(gbk_str.c_str());
+    char out_buf[out_bytes_left];
+    char *out_buf_start = out_buf;
+    size_t ret = iconv(cd, &in_buf, &in_bytes_left, &out_buf_start, &out_bytes_left);
+    if (ret == (size_t)-1)
+    {
+        iconv_close(cd);
+        return "";
+    }
+    *out_buf_start = '\0';
+    iconv_close(cd);
+    return string(out_buf);
+}
+
 struct Record
 {
     string bookName = "";
@@ -324,11 +345,12 @@ vector<User> searchUser(string keyword)
     for (const auto &entry : filesystem::directory_iterator(directory))
     {
         string filePath = entry.path().string();
+        filePath = utf8_to_gbk(filePath);
         ifstream file(filePath);
         if (file)
         {
             User user;
-            user.name = filePath.substr(12, filePath.size() - 16);
+            user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
             string line;
             while (getline(file, line))
             {
