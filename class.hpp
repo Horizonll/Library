@@ -215,6 +215,7 @@ vector<Book> tenHotBooks()
     for (const auto &entry : filesystem::directory_iterator(directory))
     {
         string filePath = entry.path().string();
+        filePath = utf8_to_gbk(filePath);
         ifstream file(filePath);
         if (file)
         {
@@ -285,14 +286,17 @@ public:
         }
     }
 
-    int editUser(string oldname)
+    int editUser()
     {
-        string oldfilePath = "./data/user/" + utf8_to_gbk(oldname) + ".txt";
-        string newfilePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
-        if (rename(oldfilePath.c_str(), newfilePath.c_str()) != 0)
-            return 0;
+        ofstream file("./data/user/" + utf8_to_gbk(this->name) + ".txt");
+        if (!file)
+            return -1;
         else
+        {
+            this->saveRecords();
+            file.close();
             return 1;
+        }
     }
 
     int deleteUser()
@@ -307,7 +311,8 @@ public:
 
 User getUser(string name)
 {
-    string filePath = "./data/user/" + utf8_to_gbk(name) + ".txt";
+    string filePath = "./data/user/" + name + ".txt";
+    filePath = utf8_to_gbk(filePath);
     if (!ifstream(filePath))
         return User();
     else
@@ -381,11 +386,12 @@ vector<User> tenActiveUsers()
     for (const auto &entry : filesystem::directory_iterator(directory))
     {
         string filePath = entry.path().string();
+        filePath = utf8_to_gbk(filePath);
         ifstream file(filePath);
         if (file)
         {
             User user;
-            user.name = filePath.substr(12, filePath.size() - 16);
+            user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
             string line;
             while (getline(file, line))
             {

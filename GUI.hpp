@@ -251,6 +251,8 @@ public:
             getline(cin, book.summary);
             book.summary = RemoveBlank(book.summary);
             cout << endl;
+            book.isBorrowed = oldBook.isBorrowed;
+            book.borrowTimes = oldBook.borrowTimes;
             oldBook.deleteBook();
             int result = book.editBook();
             switch (result)
@@ -406,8 +408,8 @@ public:
             getch();
             return;
         }
-        User user = getUser(oldname);
-        int result = user.name.empty() ? 0 : 1;
+        User oldUser = getUser(oldname);
+        int result = oldUser.name.empty() ? 0 : 1;
         switch (result)
         {
         case 0:
@@ -415,6 +417,7 @@ public:
             break;
         case 1:
             cout << "请输入新用户名：";
+            User user;
             getline(cin, user.name);
             user.name = RemoveBlank(user.name);
             cout << endl;
@@ -426,7 +429,8 @@ public:
                 getch();
                 return;
             }
-            int result = user.editUser(oldname);
+            oldUser.deleteUser();
+            int result = user.editUser();
             switch (result)
             {
             case -1:
