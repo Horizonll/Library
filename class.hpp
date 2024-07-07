@@ -19,9 +19,7 @@ string utf8_to_gbk(const string &utf8_str)
 {
     iconv_t cd = iconv_open("GBK", "UTF-8");
     if (cd == (iconv_t)-1)
-    {
         return "";
-    }
     size_t in_bytes_left = utf8_str.size();
     size_t out_bytes_left = in_bytes_left * 2;
     char *in_buf = const_cast<char *>(utf8_str.c_str());

@@ -1,5 +1,4 @@
 #include "GUI.hpp"
-#include <unistd.h>
 
 enum Choice
 {
@@ -33,6 +32,7 @@ int main()
     GUI gui;
     bool error = false;
     system("chcp 65001");
+
     while (true)
     {
         gui.ShowMenu();
