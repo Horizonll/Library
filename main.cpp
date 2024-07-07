@@ -1,6 +1,5 @@
 #include "GUI.hpp"
 #include <unistd.h>
-#include <algorithm>
 
 enum Choice
 {
@@ -15,6 +14,8 @@ enum Choice
     BorrowBook,
     ReturnBook,
     BorrowRecord,
+    TenHotBooks,
+    TenActiveUsers,
     Exit
 };
 
@@ -82,6 +83,12 @@ int main()
             break;
         case BorrowRecord:
             gui.BorrowRecord();
+            break;
+        case TenHotBooks:
+            gui.TenHotBooks();
+            break;
+        case TenActiveUsers:
+            gui.TenActiveUsers();
             break;
         case Exit:
             gui.Exit();

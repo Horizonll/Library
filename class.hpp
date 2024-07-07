@@ -1,6 +1,7 @@
 #include <fstream>
 #include <vector>
 #include <filesystem>
+#include <algorithm>
 
 using namespace std;
 
@@ -179,6 +180,39 @@ vector<Book> searchBook(string keyword)
     return results;
 }
 
+vector<Book> tenHotBooks()
+{
+    vector<Book> results;
+    string directory = "./data/book/";
+    for (const auto &entry : filesystem::directory_iterator(directory))
+    {
+        string filePath = entry.path().string();
+        ifstream file(filePath);
+        if (file)
+        {
+            Book book;
+            getline(file, book.title);
+            getline(file, book.author);
+            getline(file, book.category);
+            getline(file, book.keywords);
+            getline(file, book.summary);
+            string line;
+            getline(file, line);
+            book.isBorrowed = (line == "1");
+            getline(file, line);
+            book.borrowTimes = stoi(line);
+            file.close();
+            if (book.borrowTimes > 0)
+                results.push_back(book);
+        }
+    }
+    sort(results.begin(), results.end(), [](Book a, Book b)
+         { return a.borrowTimes > b.borrowTimes; });
+    if (results.size() > 10)
+        results.resize(10);
+    return results;
+}
+
 class User
 {
 public:
@@ -315,6 +349,44 @@ vector<User> searchUser(string keyword)
                 results.push_back(user);
         }
     }
+    return results;
+}
+
+vector<User> tenActiveUsers()
+{
+    vector<User> results;
+    string directory = "./data/user/";
+    for (const auto &entry : filesystem::directory_iterator(directory))
+    {
+        string filePath = entry.path().string();
+        ifstream file(filePath);
+        if (file)
+        {
+            User user;
+            user.name = filePath.substr(12, filePath.size() - 16);
+            string line;
+            while (getline(file, line))
+            {
+                Record record;
+                record.bookName = line;
+                getline(file, line);
+                record.borrowTime = line;
+                getline(file, line);
+                record.returnTime = line;
+                getline(file, line);
+                record.isReturned = (line == "1");
+                user.borrowRecords.push_back(record);
+            }
+            user.borrowTimes = user.borrowRecords.size();
+            file.close();
+            if (user.borrowTimes > 0)
+                results.push_back(user);
+        }
+    }
+    sort(results.begin(), results.end(), [](User a, User b)
+         { return a.borrowTimes > b.borrowTimes; });
+    if (results.size() > 10)
+        results.resize(10);
     return results;
 }
 

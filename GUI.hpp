@@ -23,7 +23,9 @@ public:
         cout << "                        9. 借书" << endl;
         cout << "                        10. 还书" << endl;
         cout << "                        11. 查看借阅记录" << endl;
-        cout << "                        12. 退出" << endl;
+        cout << "                        12. 十大热门书籍" << endl;
+        cout << "                        13. 十大活跃用户" << endl;
+        cout << "                        14. 退出" << endl;
     }
 
     void DisplayBook(Book book)
@@ -606,6 +608,47 @@ public:
         cout << "                        按任意键返回" << endl;
         getch();
     }
+
+    void TenHotBooks()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        十大热门书籍" << endl;
+        cout << endl;
+        cout << endl;
+        vector<Book> books = tenHotBooks();
+        for (int i = 0; i < books.size(); i++)
+        {
+            cout << "                        书籍" << i + 1 << endl;
+            DisplayBook(books[i]);
+            cout << endl;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+
+    void TenActiveUsers()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "                        十大活跃用户" << endl;
+        cout << endl;
+        cout << endl;
+        vector<User> users = tenActiveUsers();
+        for (int i = 0; i < users.size(); i++)
+        {
+            cout << "                        用户" << i + 1 << "：" << users[i].name << endl;
+            cout << "                        借阅次数：" << users[i].borrowTimes << endl;
+            cout << endl;
+        }
+        cout << endl;
+        cout << "                        按任意键返回" << endl;
+        getch();
+    }
+    
     void Exit()
     {
         exit(0);
