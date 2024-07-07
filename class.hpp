@@ -33,26 +33,10 @@ public:
     int borrowTimes;
     bool isBorrowed;
 
-    Book(string title = "", string author = "", string category = "", string keywords = "", string summary = "", string borrowUser = "", bool isBorrowed = false, int borrowTimes = 0)
-    {
-        this->title = title;
-        this->author = author;
-        this->category = category;
-        this->keywords = keywords;
-        this->summary = summary;
-        this->isBorrowed = isBorrowed;
-        this->borrowTimes = borrowTimes;
-    }
+    Book(string Title = "", string Author = "", string Category = "", string Keywords = "", string Summary = "", int BorrowTimes = 0, bool IsBorrowed = false)
+        : title(Title), author(Author), category(Category), keywords(Keywords), summary(Summary), borrowTimes(BorrowTimes), isBorrowed(IsBorrowed) {}
     Book(const Book &book)
-    {
-        this->title = book.title;
-        this->author = book.author;
-        this->category = book.category;
-        this->keywords = book.keywords;
-        this->summary = book.summary;
-        this->isBorrowed = book.isBorrowed;
-        this->borrowTimes = book.borrowTimes;
-    }
+        : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
     ~Book() {}
 
     int addBook()
@@ -220,16 +204,9 @@ public:
     vector<Record> borrowRecords;
     int borrowTimes = 0;
 
-    User(string name = "")
-    {
-        this->name = name;
-    }
+    User(string Name = "") : name(Name) {}
     User(const User &user)
-    {
-        this->name = user.name;
-        this->borrowRecords = user.borrowRecords;
-        this->borrowTimes = user.borrowTimes;
-    }
+        : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
     ~User() {}
 
     void saveRecords()
