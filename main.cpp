@@ -23,21 +23,25 @@ bool IsPureNumber(const string &input)
     return all_of(input.begin(), input.end(), ::isdigit);
 }
 
+class Library : public GUI
+{
+};
+
 int main()
 {
     if (!filesystem::exists("./data/book/"))
         filesystem::create_directories("./data/book/");
     if (!filesystem::exists("./data/user/"))
         filesystem::create_directories("./data/user/");
-    GUI gui;
+    Library library;
     bool error = false;
     system("chcp 65001");
 
     while (true)
     {
-        gui.ShowMenu();
+        library.ShowMenu();
         if (error)
-            gui.Error();
+            library.Error();
 
         string input;
         int choice;
@@ -51,46 +55,46 @@ int main()
         switch (choice)
         {
         case AddBook:
-            gui.AddBook();
+            library.AddBook();
             break;
         case DeleteBook:
-            gui.DeleteBook();
+            library.DeleteBook();
             break;
         case SearchBook:
-            gui.SearchBook();
+            library.SearchBook();
             break;
         case EditBook:
-            gui.EditBook();
+            library.EditBook();
             break;
         case AddUser:
-            gui.AddUser();
+            library.AddUser();
             break;
         case DeleteUser:
-            gui.DeleteUser();
+            library.DeleteUser();
             break;
         case SearchUser:
-            gui.SearchUser();
+            library.SearchUser();
             break;
         case EditUser:
-            gui.EditUser();
+            library.EditUser();
             break;
         case BorrowBook:
-            gui.BorrowBook();
+            library.BorrowBook();
             break;
         case ReturnBook:
-            gui.ReturnBook();
+            library.ReturnBook();
             break;
         case BorrowRecord:
-            gui.BorrowRecord();
+            library.BorrowRecord();
             break;
         case TenHotBooks:
-            gui.TenHotBooks();
+            library.TenHotBooks();
             break;
         case TenActiveUsers:
-            gui.TenActiveUsers();
+            library.TenActiveUsers();
             break;
         case Exit:
-            gui.Exit();
+            library.Exit();
             return 0;
         }
         error = false;

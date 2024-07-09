@@ -142,104 +142,22 @@ public:
             return 1;
         }
     }
+    friend ostream &operator<<(ostream &, Book &);
 };
 
-Book getBook(string title)
+ostream &operator<<(ostream &os, Book &book)
 {
-    string filePath = "./data/book/" + utf8_to_gbk(title) + ".txt";
-    if (!ifstream(filePath))
-        return Book();
+    os << "书名：" << book.title << endl;
+    os << "作者：" << book.author << endl;
+    os << "分类：" << book.category << endl;
+    os << "关键词：" << book.keywords << endl;
+    os << "简介：" << book.summary << endl;
+    if (book.isBorrowed)
+        os << "借出状态：已借出" << endl;
     else
-    {
-        ifstream file(filePath);
-        if (!file)
-            return Book();
-        else
-        {
-            Book book;
-            getline(file, book.title);
-            getline(file, book.author);
-            getline(file, book.category);
-            getline(file, book.keywords);
-            getline(file, book.summary);
-            string line;
-            getline(file, line);
-            book.isBorrowed = (line == "1");
-            getline(file, line);
-            book.borrowTimes = stoi(line);
-            file.close();
-            return book;
-        }
-    }
-}
-
-vector<Book> searchBook(string keyword)
-{
-    vector<Book> results;
-    string directory = "./data/book/";
-    for (const auto &entry : filesystem::directory_iterator(directory))
-    {
-        string filePath = entry.path().string();
-        filePath = utf8_to_gbk(filePath);
-        ifstream file(filePath);
-        if (file)
-        {
-            Book book;
-            getline(file, book.title);
-            getline(file, book.author);
-            getline(file, book.category);
-            getline(file, book.keywords);
-            getline(file, book.summary);
-            string line;
-            getline(file, line);
-            book.isBorrowed = (line == "1");
-            getline(file, line);
-            book.borrowTimes = stoi(line);
-            file.close();
-
-            if (book.title.find(keyword) != string::npos ||
-                book.author.find(keyword) != string::npos ||
-                book.category.find(keyword) != string::npos ||
-                book.keywords.find(keyword) != string::npos ||
-                book.summary.find(keyword) != string::npos)
-                results.push_back(book);
-        }
-    }
-    return results;
-}
-
-vector<Book> tenHotBooks()
-{
-    vector<Book> results;
-    string directory = "./data/book/";
-    for (const auto &entry : filesystem::directory_iterator(directory))
-    {
-        string filePath = entry.path().string();
-        filePath = utf8_to_gbk(filePath);
-        ifstream file(filePath);
-        if (file)
-        {
-            Book book;
-            getline(file, book.title);
-            getline(file, book.author);
-            getline(file, book.category);
-            getline(file, book.keywords);
-            getline(file, book.summary);
-            string line;
-            getline(file, line);
-            book.isBorrowed = (line == "1");
-            getline(file, line);
-            book.borrowTimes = stoi(line);
-            file.close();
-            if (book.borrowTimes > 0)
-                results.push_back(book);
-        }
-    }
-    sort(results.begin(), results.end(), [](Book a, Book b)
-         { return a.borrowTimes > b.borrowTimes; });
-    if (results.size() > 10)
-        results.resize(10);
-    return results;
+        os << "借出状态：未借出" << endl;
+    os << "借出次数：" << book.borrowTimes << endl;
+    return os;
 }
 
 class User
@@ -286,6 +204,15 @@ public:
         }
     }
 
+    int deleteUser()
+    {
+        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
+        if (remove(filePath.c_str()) == 0)
+            return 1;
+        else
+            return -1;
+    }
+
     int editUser()
     {
         ofstream file("./data/user/" + utf8_to_gbk(this->name) + ".txt");
@@ -298,176 +225,297 @@ public:
             return 1;
         }
     }
+    friend ostream &operator<<(ostream &, User &);
+};
 
-    int deleteUser()
+ostream &operator<<(ostream &os, User &user)
+{
+    os << "借阅次数：" << user.borrowTimes << endl;
+    os << endl;
+    os << "借阅记录：" << endl;
+    os << endl;
+    for (auto record : user.borrowRecords)
     {
-        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
-        if (remove(filePath.c_str()) == 0)
-            return 1;
+        os << "书名：" << record.bookName << endl;
+        os << "借书时间：" << record.borrowTime << endl;
+        if (record.isReturned)
+            os << "还书时间：" << record.returnTime << endl;
         else
-            return -1;
+            os << "还书时间：未还" << endl;
+        os << endl;
+    }
+    return os;
+}
+
+class BookManager
+{
+public:
+    Book getBook(string title)
+    {
+        string filePath = "./data/book/" + utf8_to_gbk(title) + ".txt";
+        if (!ifstream(filePath))
+            return Book();
+        else
+        {
+            ifstream file(filePath);
+            if (!file)
+                return Book();
+            else
+            {
+                Book book;
+                getline(file, book.title);
+                getline(file, book.author);
+                getline(file, book.category);
+                getline(file, book.keywords);
+                getline(file, book.summary);
+                string line;
+                getline(file, line);
+                book.isBorrowed = (line == "1");
+                getline(file, line);
+                book.borrowTimes = stoi(line);
+                file.close();
+                return book;
+            }
+        }
+    }
+
+    vector<Book> searchBook(string keyword)
+    {
+        vector<Book> results;
+        string directory = "./data/book/";
+        for (const auto &entry : filesystem::directory_iterator(directory))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
+            {
+                Book book;
+                getline(file, book.title);
+                getline(file, book.author);
+                getline(file, book.category);
+                getline(file, book.keywords);
+                getline(file, book.summary);
+                string line;
+                getline(file, line);
+                book.isBorrowed = (line == "1");
+                getline(file, line);
+                book.borrowTimes = stoi(line);
+                file.close();
+
+                if (book.title.find(keyword) != string::npos ||
+                    book.author.find(keyword) != string::npos ||
+                    book.category.find(keyword) != string::npos ||
+                    book.keywords.find(keyword) != string::npos ||
+                    book.summary.find(keyword) != string::npos)
+                    results.push_back(book);
+            }
+        }
+        return results;
+    }
+
+    vector<Book> tenHotBooks()
+    {
+        vector<Book> results;
+        string directory = "./data/book/";
+        for (const auto &entry : filesystem::directory_iterator(directory))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
+            {
+                Book book;
+                getline(file, book.title);
+                getline(file, book.author);
+                getline(file, book.category);
+                getline(file, book.keywords);
+                getline(file, book.summary);
+                string line;
+                getline(file, line);
+                book.isBorrowed = (line == "1");
+                getline(file, line);
+                book.borrowTimes = stoi(line);
+                file.close();
+                if (book.borrowTimes > 0)
+                    results.push_back(book);
+            }
+        }
+        sort(results.begin(), results.end(), [](Book a, Book b)
+             { return a.borrowTimes > b.borrowTimes; });
+        if (results.size() > 10)
+            results.resize(10);
+        return results;
     }
 };
 
-User getUser(string name)
+class UserManager
 {
-    string filePath = "./data/user/" + name + ".txt";
-    filePath = utf8_to_gbk(filePath);
-    if (!ifstream(filePath))
-        return User();
-    else
+public:
+    User getUser(string name)
     {
-        ifstream file(filePath);
-        if (!file)
+        string filePath = "./data/user/" + name + ".txt";
+        filePath = utf8_to_gbk(filePath);
+        if (!ifstream(filePath))
             return User();
         else
         {
-            User user(name);
-            string line;
-            while (getline(file, line))
+            ifstream file(filePath);
+            if (!file)
+                return User();
+            else
             {
-                Record record;
-                record.bookName = line;
-                getline(file, line);
-                record.borrowTime = line;
-                getline(file, line);
-                record.returnTime = line;
-                getline(file, line);
-                record.isReturned = (line == "1");
-                user.borrowRecords.push_back(record);
+                User user(name);
+                string line;
+                while (getline(file, line))
+                {
+                    Record record;
+                    record.bookName = line;
+                    getline(file, line);
+                    record.borrowTime = line;
+                    getline(file, line);
+                    record.returnTime = line;
+                    getline(file, line);
+                    record.isReturned = (line == "1");
+                    user.borrowRecords.push_back(record);
+                }
+                user.borrowTimes = user.borrowRecords.size();
+                file.close();
+                return user;
             }
-            user.borrowTimes = user.borrowRecords.size();
-            file.close();
-            return user;
         }
     }
-}
 
-vector<User> searchUser(string keyword)
-{
-    vector<User> results;
-    string directory = "./data/user/";
-    for (const auto &entry : filesystem::directory_iterator(directory))
+    vector<User> searchUser(string keyword)
     {
-        string filePath = entry.path().string();
-        filePath = utf8_to_gbk(filePath);
-        ifstream file(filePath);
-        if (file)
+        vector<User> results;
+        string directory = "./data/user/";
+        for (const auto &entry : filesystem::directory_iterator(directory))
         {
-            User user;
-            user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
-            string line;
-            while (getline(file, line))
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
             {
-                Record record;
-                record.bookName = line;
-                getline(file, line);
-                record.borrowTime = line;
-                getline(file, line);
-                record.returnTime = line;
-                getline(file, line);
-                record.isReturned = (line == "1");
-                user.borrowRecords.push_back(record);
+                User user;
+                user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
+                string line;
+                while (getline(file, line))
+                {
+                    Record record;
+                    record.bookName = line;
+                    getline(file, line);
+                    record.borrowTime = line;
+                    getline(file, line);
+                    record.returnTime = line;
+                    getline(file, line);
+                    record.isReturned = (line == "1");
+                    user.borrowRecords.push_back(record);
+                }
+                user.borrowTimes = user.borrowRecords.size();
+                file.close();
+
+                if (user.name.find(keyword) != string::npos)
+                    results.push_back(user);
             }
-            user.borrowTimes = user.borrowRecords.size();
-            file.close();
-
-            if (user.name.find(keyword) != string::npos)
-                results.push_back(user);
         }
+        return results;
     }
-    return results;
-}
 
-vector<User> tenActiveUsers()
-{
-    vector<User> results;
-    string directory = "./data/user/";
-    for (const auto &entry : filesystem::directory_iterator(directory))
+    vector<User> tenActiveUsers()
     {
-        string filePath = entry.path().string();
-        filePath = utf8_to_gbk(filePath);
-        ifstream file(filePath);
-        if (file)
+        vector<User> results;
+        string directory = "./data/user/";
+        for (const auto &entry : filesystem::directory_iterator(directory))
         {
-            User user;
-            user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
-            string line;
-            while (getline(file, line))
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
             {
-                Record record;
-                record.bookName = line;
-                getline(file, line);
-                record.borrowTime = line;
-                getline(file, line);
-                record.returnTime = line;
-                getline(file, line);
-                record.isReturned = (line == "1");
-                user.borrowRecords.push_back(record);
+                User user;
+                user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
+                string line;
+                while (getline(file, line))
+                {
+                    Record record;
+                    record.bookName = line;
+                    getline(file, line);
+                    record.borrowTime = line;
+                    getline(file, line);
+                    record.returnTime = line;
+                    getline(file, line);
+                    record.isReturned = (line == "1");
+                    user.borrowRecords.push_back(record);
+                }
+                user.borrowTimes = user.borrowRecords.size();
+                file.close();
+                if (user.borrowTimes > 0)
+                    results.push_back(user);
             }
-            user.borrowTimes = user.borrowRecords.size();
-            file.close();
-            if (user.borrowTimes > 0)
-                results.push_back(user);
         }
+        sort(results.begin(), results.end(), [](User a, User b)
+             { return a.borrowTimes > b.borrowTimes; });
+        if (results.size() > 10)
+            results.resize(10);
+        return results;
     }
-    sort(results.begin(), results.end(), [](User a, User b)
-         { return a.borrowTimes > b.borrowTimes; });
-    if (results.size() > 10)
-        results.resize(10);
-    return results;
-}
+};
 
-int borrowBook(string userName, string bookName)
+class Manager : public BookManager, public UserManager
 {
-    Book book = getBook(bookName);
-    if (book.title == "")
-        return 0;
-    User user = getUser(userName);
-    if (user.name == "")
-        return -2;
-    if (book.isBorrowed)
-        return -1;
-    Record record;
-    record.bookName = bookName;
-    record.borrowTime = getCurrentDateTime();
-    record.isReturned = false;
-    user.borrowRecords.push_back(record);
-    user.borrowTimes = user.borrowRecords.size();
-    user.saveRecords();
-    book.isBorrowed = true;
-    book.borrowTimes++;
-    book.saveBook();
-    return 1;
-}
-
-int returnBook(string userName, string bookName)
-{
-    Book book = getBook(bookName);
-    if (book.title == "")
-        return 0;
-    User user = getUser(userName);
-    if (user.name == "")
-        return -2;
-    bool found = false;
-    bool isBorrowed = false;
-    for (auto &record : user.borrowRecords)
+public:
+    int borrowBook(string userName, string bookName)
     {
-        if (record.bookName == bookName && !record.isReturned)
-        {
-            record.returnTime = getCurrentDateTime();
-            record.isReturned = true;
-            found = true;
-            isBorrowed = true;
-            break;
-        }
+        Book book = getBook(bookName);
+        if (book.title == "")
+            return 0;
+        User user = getUser(userName);
+        if (user.name == "")
+            return -2;
+        if (book.isBorrowed)
+            return -1;
+        Record record;
+        record.bookName = bookName;
+        record.borrowTime = getCurrentDateTime();
+        record.isReturned = false;
+        user.borrowRecords.push_back(record);
+        user.borrowTimes = user.borrowRecords.size();
+        user.saveRecords();
+        book.isBorrowed = true;
+        book.borrowTimes++;
+        book.saveBook();
+        return 1;
     }
-    if (!found)
-        return -1;
-    if (!isBorrowed)
-        return -3;
-    user.saveRecords();
-    book.isBorrowed = false;
-    book.saveBook();
-    return 1;
-}
+
+    int returnBook(string userName, string bookName)
+    {
+        Book book = getBook(bookName);
+        if (book.title == "")
+            return 0;
+        User user = getUser(userName);
+        if (user.name == "")
+            return -2;
+        bool found = false;
+        bool isBorrowed = false;
+        for (auto &record : user.borrowRecords)
+        {
+            if (record.bookName == bookName && !record.isReturned)
+            {
+                record.returnTime = getCurrentDateTime();
+                record.isReturned = true;
+                found = true;
+                isBorrowed = true;
+                break;
+            }
+        }
+        if (!found)
+            return -1;
+        if (!isBorrowed)
+            return -3;
+        user.saveRecords();
+        book.isBorrowed = false;
+        book.saveBook();
+        return 1;
+    }
+};

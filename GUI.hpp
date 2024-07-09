@@ -2,7 +2,7 @@
 #include <conio.h>
 #include <iostream>
 
-class GUI
+class GUI : public Manager
 {
 public:
     void ShowMenu()
@@ -31,20 +31,6 @@ public:
         cout << "请选择操作：";
     }
 
-    void DisplayBook(Book book)
-    {
-        cout << "书名：" << book.title << endl;
-        cout << "作者：" << book.author << endl;
-        cout << "分类：" << book.category << endl;
-        cout << "关键词：" << book.keywords << endl;
-        cout << "简介：" << book.summary << endl;
-        if (book.isBorrowed == 1)
-            cout << "借出状态：已借出" << endl;
-        else
-            cout << "借出状态：未借出" << endl;
-        cout << "借阅次数：" << book.borrowTimes << endl;
-    }
-
     string RemoveBlank(string str)
     {
         auto start = str.find_first_not_of(" \t\n\r\f\v");
@@ -52,6 +38,11 @@ public:
             return "";
         auto end = str.find_last_not_of(" \t\n\r\f\v");
         return str.substr(start, end - start + 1);
+    }
+
+    void DisplayBook(Book book)
+    {
+        cout << book;
     }
 
     void AddBook()
@@ -268,6 +259,11 @@ public:
         cout << endl;
         cout << "按任意键返回" << endl;
         getch();
+    }
+
+    void DisplayUser(User user)
+    {
+        cout << user;
     }
 
     void AddUser()
@@ -588,20 +584,7 @@ public:
             cout << "用户不存在" << endl;
             break;
         case 1:
-            cout << "借阅次数：" << user.borrowTimes << endl;
-            cout << endl;
-            cout << "借阅记录" << endl;
-            cout << endl;
-            for (auto record : user.borrowRecords)
-            {
-                cout << "书名：" << record.bookName << endl;
-                cout << "借书时间：" << record.borrowTime << endl;
-                if (record.returnTime == "")
-                    cout << "还书时间：未还" << endl;
-                else
-                    cout << "还书时间：" << record.returnTime << endl;
-                cout << endl;
-            }
+            DisplayUser(user);
         }
         cout << endl;
         cout << "按任意键返回" << endl;
