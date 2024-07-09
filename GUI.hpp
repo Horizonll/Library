@@ -657,6 +657,7 @@ public:
                 break;
             default:
                 cout << "删除失败" << endl;
+                break;
             }
         }
         else
@@ -687,6 +688,7 @@ public:
                 break;
             default:
                 cout << "删除失败" << endl;
+                break;
             }
         }
         else
