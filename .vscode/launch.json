@@ -9,7 +9,7 @@
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
-            "externalConsole": true, //是否用win终端展示
+            "externalConsole": true,
             "MIMode": "gdb",
             "setupCommands": [
                 {
