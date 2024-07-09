@@ -17,9 +17,9 @@ public:
         cout << "3. 查找书籍      11. 借阅记录" << endl;
         cout << "4. 编辑书籍      12. 十大热门书籍" << endl;
         cout << "5. 添加用户      13. 十大活跃用户" << endl;
-        cout << "6. 删除用户      14. 退出" << endl;
-        cout << "7. 查找用户" << endl;
-        cout << "8. 编辑用户" << endl;
+        cout << "6. 删除用户      14. 删除所有书籍" << endl;
+        cout << "7. 查找用户      15. 删除所有用户" << endl;
+        cout << "8. 编辑用户      16. 退出" << endl;
         cout << "---------------------------------" << endl;
         cout << endl;
         cout << "请选择操作：";
@@ -638,10 +638,71 @@ public:
         getch();
     }
 
+    void DeleteAllBooks()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "确认删除所有书籍？(y/n)";
+        string c;
+        getline(cin, c);
+        cout << endl;
+        if (c == "y")
+        {
+            int result = deleteAllBooks();
+            switch (result)
+            {
+            case 1:
+                cout << "删除成功" << endl;
+                break;
+            default:
+                cout << "删除失败" << endl;
+            }
+        }
+        else
+        {
+            cout << "取消删除" << endl;
+        }
+        cout << endl;
+        cout << "按任意键返回" << endl;
+        getch();
+    }
+
+    void DeleteAllUsers()
+    {
+        system("cls");
+        cout << endl;
+        cout << endl;
+        cout << "确认删除所有用户？(y/n)";
+        string c;
+        getline(cin, c);
+        cout << endl;
+        if (c == "y")
+        {
+            int result = deleteAllUsers();
+            switch (result)
+            {
+            case 1:
+                cout << "删除成功" << endl;
+                break;
+            default:
+                cout << "删除失败" << endl;
+            }
+        }
+        else
+        {
+            cout << "取消删除" << endl;
+        }
+        cout << endl;
+        cout << "按任意键返回" << endl;
+        getch();
+    }
+
     void Exit()
     {
         exit(0);
     }
+
     void Error()
     {
         cout << endl;

@@ -15,6 +15,8 @@ enum Choice
     BorrowRecord,
     TenHotBooks,
     TenActiveUsers,
+    DeleteAllBooks,
+    DeleteAllUsers,
     Exit
 };
 
@@ -25,17 +27,17 @@ bool IsPureNumber(const string &input)
 
 int main()
 {
-    if (!filesystem::exists("./data/book/"))
-        filesystem::create_directories("./data/book/");
-    if (!filesystem::exists("./data/user/"))
-        filesystem::create_directories("./data/user/");
-
     GUI library;
     bool error = false;
     system("chcp 65001");
 
     while (true)
     {
+        if (!filesystem::exists("./data/book/"))
+            filesystem::create_directories("./data/book/");
+        if (!filesystem::exists("./data/user/"))
+            filesystem::create_directories("./data/user/");
+
         library.ShowMenu();
         if (error)
             library.Error();
@@ -93,9 +95,14 @@ int main()
         case TenActiveUsers:
             library.TenActiveUsers();
             break;
+        case DeleteAllBooks:
+            library.DeleteAllBooks();
+            break;
+        case DeleteAllUsers:
+            library.DeleteAllUsers();
+            break;
         case Exit:
             library.Exit();
-            return 0;
         }
         error = false;
     }

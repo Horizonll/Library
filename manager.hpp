@@ -122,6 +122,18 @@ public:
         }
         return results;
     }
+
+    int deleteAllBooks()
+    {
+        string directory = "./data/book/";
+        for (const auto &entry : filesystem::directory_iterator(directory))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            remove(filePath.c_str());
+        }
+        return 1;
+    }
 };
 
 class UserManager
@@ -243,6 +255,18 @@ public:
             results.resize(10);
         }
         return results;
+    }
+
+    int deleteAllUsers()
+    {
+        string directory = "./data/user/";
+        for (const auto &entry : filesystem::directory_iterator(directory))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            remove(filePath.c_str());
+        }
+        return 1;
     }
 };
 
