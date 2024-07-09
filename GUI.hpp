@@ -1,4 +1,4 @@
-#include "class.hpp"
+#include "manager.hpp"
 #include <conio.h>
 #include <iostream>
 
@@ -10,23 +10,17 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "   图书管理系统" << endl;
-        cout << "-----------------" << endl;
-        cout << "1. 添加书籍" << endl;
-        cout << "2. 删除书籍" << endl;
-        cout << "3. 查找书籍" << endl;
-        cout << "4. 编辑书籍" << endl;
-        cout << "5. 添加用户" << endl;
-        cout << "6. 删除用户" << endl;
+        cout << "          图书管理系统" << endl;
+        cout << "---------------------------------" << endl;
+        cout << "1. 添加书籍      9. 借书" << endl;
+        cout << "2. 删除书籍      10. 还书" << endl;
+        cout << "3. 查找书籍      11. 借阅记录" << endl;
+        cout << "4. 编辑书籍      12. 十大热门书籍" << endl;
+        cout << "5. 添加用户      13. 十大活跃用户" << endl;
+        cout << "6. 删除用户      14. 退出" << endl;
         cout << "7. 查找用户" << endl;
         cout << "8. 编辑用户" << endl;
-        cout << "9. 借书" << endl;
-        cout << "10. 还书" << endl;
-        cout << "11. 查看借阅记录" << endl;
-        cout << "12. 十大热门书籍" << endl;
-        cout << "13. 十大活跃用户" << endl;
-        cout << "14. 退出" << endl;
-        cout << "-----------------" << endl;
+        cout << "---------------------------------" << endl;
         cout << endl;
         cout << "请选择操作：";
     }
@@ -546,9 +540,6 @@ public:
         case 1:
             cout << "还书成功" << endl;
             break;
-        case -3:
-            cout << "用户未借过此书" << endl;
-            break;
         }
         cout << endl;
         cout << "按任意键返回" << endl;
@@ -560,7 +551,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "查看借阅记录" << endl;
+        cout << "借阅记录" << endl;
         cout << endl;
         cout << endl;
         cout << "请输入用户名：";
@@ -602,7 +593,7 @@ public:
         vector<Book> books = tenHotBooks();
         if (books.size() == 0)
         {
-            cout << "无借阅记录" << endl;
+            cout << "无记录" << endl;
             cout << endl;
             cout << "按任意键返回" << endl;
             getch();
@@ -630,7 +621,7 @@ public:
         vector<User> users = tenActiveUsers();
         if (users.size() == 0)
         {
-            cout << "无借阅记录" << endl;
+            cout << "无记录" << endl;
             cout << endl;
             cout << "按任意键返回" << endl;
             getch();

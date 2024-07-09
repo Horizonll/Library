@@ -23,17 +23,14 @@ bool IsPureNumber(const string &input)
     return all_of(input.begin(), input.end(), ::isdigit);
 }
 
-class Library : public GUI
-{
-};
-
 int main()
 {
     if (!filesystem::exists("./data/book/"))
         filesystem::create_directories("./data/book/");
     if (!filesystem::exists("./data/user/"))
         filesystem::create_directories("./data/user/");
-    Library library;
+
+    GUI library;
     bool error = false;
     system("chcp 65001");
 
@@ -46,7 +43,10 @@ int main()
         string input;
         int choice;
         getline(cin, input);
-        if (!IsPureNumber(input) || input.empty() || (choice = stoi(input)) > Exit || choice < AddBook)
+        if (!IsPureNumber(input) ||
+            input.empty() ||
+            (choice = stoi(input)) > Exit ||
+            choice < AddBook)
         {
             error = true;
             continue;
