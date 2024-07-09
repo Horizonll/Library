@@ -2,7 +2,6 @@
 #include "user.hpp"
 #include <filesystem>
 #include <algorithm>
-using namespace std;
 
 string getCurrentDateTime()
 {
