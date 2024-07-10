@@ -73,7 +73,7 @@ public:
             return 1;
         }
     }
-    
+
     friend ostream &operator<<(ostream &, User &);
 };
 
