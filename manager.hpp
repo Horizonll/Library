@@ -3,15 +3,6 @@
 #include <filesystem>
 #include <algorithm>
 
-string getCurrentDateTime()
-{
-    time_t now = time(0);
-    tm *ltm = localtime(&now);
-    char buffer[80];
-    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ltm);
-    return buffer;
-}
-
 class BookManager
 {
 public:
@@ -272,6 +263,15 @@ public:
 class Manager : public BookManager, public UserManager
 {
 public:
+    string getCurrentDateTime() const
+    {
+        time_t now = time(0);
+        tm *ltm = localtime(&now);
+        char buffer[80];
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ltm);
+        return buffer;
+    }
+
     int borrowBook(const string &userName, const string &bookName) const
     {
         Book book = getBook(bookName);
