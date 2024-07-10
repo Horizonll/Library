@@ -1,4 +1,4 @@
-#include "GUI.hpp"
+#include "library.hpp"
 
 enum Choice
 {
@@ -27,17 +27,13 @@ bool IsPureNumber(const string &input)
 
 int main()
 {
-    GUI library;
+    Library library;
     bool error = false;
     system("chcp 65001");
 
     while (true)
     {
-        if (!filesystem::exists("./data/book/"))
-            filesystem::create_directories("./data/book/");
-        if (!filesystem::exists("./data/user/"))
-            filesystem::create_directories("./data/user/");
-
+        library.CheckData();
         library.ShowMenu();
         if (error)
             library.Error();
