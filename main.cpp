@@ -43,8 +43,7 @@ int main()
         getline(cin, input);
         if (!IsPureNumber(input) ||
             input.empty() ||
-            (choice = stoi(input)) > Exit ||
-            choice < AddBook)
+            (choice = stoi(input)) > Exit || choice < AddBook)
         {
             error = true;
             continue;
