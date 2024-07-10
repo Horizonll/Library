@@ -1,4 +1,4 @@
-#include "GUI.hpp"
+#include "gui.hpp"
 
 class Library : public GUI
 {
