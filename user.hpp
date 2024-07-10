@@ -20,20 +20,6 @@ public:
         : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
     ~User() {}
 
-    void saveRecords()
-    {
-        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
-        ofstream file(filePath);
-        for (auto record : this->borrowRecords)
-        {
-            file << record.bookName << endl;
-            file << record.borrowTime << endl;
-            file << record.returnTime << endl;
-            file << record.isReturned << endl;
-        }
-        file.close();
-    }
-
     int addUser()
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
@@ -50,6 +36,20 @@ public:
                 return 1;
             }
         }
+    }
+
+    void saveRecords()
+    {
+        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
+        ofstream file(filePath);
+        for (auto record : this->borrowRecords)
+        {
+            file << record.bookName << endl;
+            file << record.borrowTime << endl;
+            file << record.returnTime << endl;
+            file << record.isReturned << endl;
+        }
+        file.close();
     }
 
     int deleteUser()
@@ -73,6 +73,7 @@ public:
             return 1;
         }
     }
+    
     friend ostream &operator<<(ostream &, User &);
 };
 
