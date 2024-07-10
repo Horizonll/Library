@@ -3,7 +3,7 @@
 class Library : public GUI
 {
 public:
-    void CheckData()
+    void CheckDirectory()
     {
         if (!filesystem::exists("./data/book/"))
             filesystem::create_directories("./data/book/");

@@ -288,10 +288,10 @@ public:
         record.isReturned = false;
         user.borrowRecords.push_back(record);
         user.borrowTimes = user.borrowRecords.size();
-        user.saveRecords();
+        user.Save();
         book.isBorrowed = true;
         book.borrowTimes++;
-        book.saveBook();
+        book.Save();
         return 1;
     }
 
@@ -310,9 +310,9 @@ public:
             {
                 record.returnTime = getCurrentDateTime();
                 record.isReturned = true;
-                user.saveRecords();
+                user.Save();
                 book.isBorrowed = false;
-                book.saveBook();
+                book.Save();
                 return 1;
             }
         }

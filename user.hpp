@@ -1,3 +1,4 @@
+#include "base.hpp"
 #include <vector>
 
 struct Record
@@ -8,7 +9,7 @@ struct Record
     bool isReturned = false;
 };
 
-class User
+class User : public Base
 {
 public:
     string name;
@@ -20,7 +21,7 @@ public:
         : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
     ~User() {}
 
-    int addUser() const
+    virtual int Add() const
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (ifstream(filePath))
@@ -38,7 +39,7 @@ public:
         }
     }
 
-    void saveRecords() const
+    virtual void Save() const
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         ofstream file(filePath);
@@ -52,7 +53,7 @@ public:
         file.close();
     }
 
-    int deleteUser() const
+    virtual int Delete() const
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (remove(filePath.c_str()) == 0)
@@ -61,14 +62,14 @@ public:
             return -1;
     }
 
-    int editUser() const
+    virtual int Edit() const
     {
         ofstream file("./data/user/" + utf8_to_gbk(this->name) + ".txt");
         if (!file)
             return -1;
         else
         {
-            this->saveRecords();
+            this->Save();
             file.close();
             return 1;
         }

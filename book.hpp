@@ -1,3 +1,4 @@
+#include "base.hpp"
 #include <fstream>
 #include <iconv.h>
 using namespace std;
@@ -44,7 +45,7 @@ string gbk_to_utf8(const string &gbk_str)
     return string(out_buf);
 }
 
-class Book
+class Book : public Base
 {
 public:
     string title;
@@ -61,7 +62,7 @@ public:
         : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
     ~Book() {}
 
-    int addBook() const
+    virtual int Add() const
     {
         string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         if (ifstream(filePath))
@@ -86,7 +87,7 @@ public:
         }
     }
 
-    void saveBook() const
+    virtual void Save() const
     {
         string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         ofstream file(filePath);
@@ -100,7 +101,7 @@ public:
         file.close();
     }
 
-    int deleteBook() const
+    virtual int Delete() const
     {
         string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         if (remove(filePath.c_str()) == 0)
@@ -109,14 +110,14 @@ public:
             return -1;
     }
 
-    int editBook() const
+    virtual int Edit() const
     {
         ofstream file("./data/book/" + utf8_to_gbk(this->title) + ".txt");
         if (!file)
             return -1;
         else
         {
-            this->saveBook();
+            this->Save();
             file.close();
             return 1;
         }

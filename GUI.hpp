@@ -81,7 +81,7 @@ public:
         getline(cin, book.summary);
         book.summary = RemoveBlank(book.summary);
         cout << endl;
-        int result = book.addBook();
+        int result = book.Add();
         switch (result)
         {
         case 0:
@@ -129,7 +129,7 @@ public:
             return;
         }
         Book book(title);
-        int result = book.deleteBook();
+        int result = book.Delete();
         switch (result)
         {
         case -1:
@@ -238,8 +238,8 @@ public:
             cout << endl;
             book.isBorrowed = oldBook.isBorrowed;
             book.borrowTimes = oldBook.borrowTimes;
-            oldBook.deleteBook();
-            int result = book.editBook();
+            oldBook.Delete();
+            int result = book.Edit();
             switch (result)
             {
             case -1:
@@ -281,7 +281,7 @@ public:
             getch();
             return;
         }
-        int result = user.addUser();
+        int result = user.Add();
         switch (result)
         {
         case 0:
@@ -329,7 +329,7 @@ public:
             return;
         }
         User user(name);
-        int result = user.deleteUser();
+        int result = user.Delete();
         switch (result)
         {
         case 1:
@@ -419,8 +419,8 @@ public:
                 getch();
                 return;
             }
-            oldUser.deleteUser();
-            int result = user.editUser();
+            oldUser.Delete();
+            int result = user.Edit();
             switch (result)
             {
             case -1:

@@ -33,7 +33,7 @@ int main()
 
     while (true)
     {
-        library.CheckData();
+        library.CheckDirectory();
         library.ShowMenu();
         if (error)
             library.Error();
