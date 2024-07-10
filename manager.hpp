@@ -1,3 +1,4 @@
+#include "base.hpp"
 #include "book.hpp"
 #include "user.hpp"
 #include <filesystem>

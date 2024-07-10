@@ -1,4 +1,3 @@
-#include "base.hpp"
 #include <vector>
 
 struct Record

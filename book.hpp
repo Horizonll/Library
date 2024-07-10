@@ -1,7 +1,5 @@
-#include "base.hpp"
 #include <fstream>
 #include <iconv.h>
-using namespace std;
 
 string utf8_to_gbk(const string &utf8_str)
 {
