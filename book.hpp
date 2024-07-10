@@ -52,16 +52,16 @@ public:
     string category;
     string keywords;
     string summary;
-    int borrowTimes;
-    bool isBorrowed;
+    int borrowTimes = 0;
+    bool isBorrowed = false;
 
-    Book(string Title = "", string Author = "", string Category = "", string Keywords = "", string Summary = "", int BorrowTimes = 0, bool IsBorrowed = false)
-        : title(Title), author(Author), category(Category), keywords(Keywords), summary(Summary), borrowTimes(BorrowTimes), isBorrowed(IsBorrowed) {}
+    Book(string Title = "", string Author = "", string Category = "", string Keywords = "", string Summary = "")
+        : title(Title), author(Author), category(Category), keywords(Keywords), summary(Summary) {}
     Book(const Book &book)
         : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
     ~Book() {}
 
-    int addBook()
+    int addBook() const
     {
         string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         if (ifstream(filePath))
@@ -86,7 +86,7 @@ public:
         }
     }
 
-    void saveBook()
+    void saveBook() const
     {
         string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         ofstream file(filePath);
@@ -100,7 +100,7 @@ public:
         file.close();
     }
 
-    int deleteBook()
+    int deleteBook() const
     {
         string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
         if (remove(filePath.c_str()) == 0)
@@ -109,7 +109,7 @@ public:
             return -1;
     }
 
-    int editBook()
+    int editBook() const
     {
         ofstream file("./data/book/" + utf8_to_gbk(this->title) + ".txt");
         if (!file)
@@ -122,10 +122,10 @@ public:
         }
     }
 
-    friend ostream &operator<<(ostream &, Book &);
+    friend ostream &operator<<(ostream &, const Book &);
 };
 
-ostream &operator<<(ostream &os, Book &book)
+ostream &operator<<(ostream &os, const Book &book)
 {
     os << "书名：" << book.title << endl;
     os << "作者：" << book.author << endl;

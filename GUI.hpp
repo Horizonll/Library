@@ -5,7 +5,7 @@
 class GUI : public Manager
 {
 public:
-    void ShowMenu()
+    void ShowMenu() const
     {
         system("cls");
         cout << endl;
@@ -25,7 +25,7 @@ public:
         cout << "请选择操作：";
     }
 
-    string RemoveBlank(string str)
+    string RemoveBlank(const string &str) const
     {
         auto start = str.find_first_not_of(" \t\n\r\f\v");
         if (start == string::npos)
@@ -34,12 +34,12 @@ public:
         return str.substr(start, end - start + 1);
     }
 
-    void DisplayBook(Book book)
+    void DisplayBook(const Book &book) const
     {
         cout << book;
     }
 
-    void AddBook()
+    void AddBook() const
     {
         system("cls");
         Book book;
@@ -99,7 +99,7 @@ public:
         getch();
     }
 
-    void DeleteBook()
+    void DeleteBook() const
     {
         system("cls");
         cout << endl;
@@ -144,7 +144,7 @@ public:
         getch();
     }
 
-    void SearchBook()
+    void SearchBook() const
     {
         system("cls");
         cout << endl;
@@ -179,7 +179,7 @@ public:
         getch();
     }
 
-    void EditBook()
+    void EditBook() const
     {
         system("cls");
         cout << endl;
@@ -255,12 +255,12 @@ public:
         getch();
     }
 
-    void DisplayUser(User user)
+    void DisplayUser(const User &user) const
     {
         cout << user;
     }
 
-    void AddUser()
+    void AddUser() const
     {
         system("cls");
         User user;
@@ -299,7 +299,7 @@ public:
         getch();
     }
 
-    void DeleteUser()
+    void DeleteUser() const
     {
         system("cls");
         cout << endl;
@@ -344,7 +344,7 @@ public:
         getch();
     }
 
-    void SearchUser()
+    void SearchUser() const
     {
         system("cls");
         cout << endl;
@@ -377,7 +377,7 @@ public:
         getch();
     }
 
-    void EditUser()
+    void EditUser() const
     {
         system("cls");
         cout << endl;
@@ -436,7 +436,7 @@ public:
         getch();
     }
 
-    void BorrowBook()
+    void BorrowBook() const
     {
         system("cls");
         cout << endl;
@@ -491,7 +491,7 @@ public:
         getch();
     }
 
-    void ReturnBook()
+    void ReturnBook() const
     {
         system("cls");
         cout << endl;
@@ -546,7 +546,7 @@ public:
         getch();
     }
 
-    void BorrowRecord()
+    void BorrowRecord() const
     {
         system("cls");
         cout << endl;
@@ -582,7 +582,7 @@ public:
         getch();
     }
 
-    void TenHotBooks()
+    void TenHotBooks() const
     {
         system("cls");
         cout << endl;
@@ -610,7 +610,7 @@ public:
         getch();
     }
 
-    void TenActiveUsers()
+    void TenActiveUsers() const
     {
         system("cls");
         cout << endl;
@@ -638,7 +638,7 @@ public:
         getch();
     }
 
-    void DeleteAllBooks()
+    void DeleteAllBooks() const
     {
         system("cls");
         cout << endl;
@@ -669,7 +669,7 @@ public:
         getch();
     }
 
-    void DeleteAllUsers()
+    void DeleteAllUsers() const
     {
         system("cls");
         cout << endl;
@@ -700,12 +700,12 @@ public:
         getch();
     }
 
-    void Exit()
+    void Exit() const
     {
         exit(0);
     }
 
-    void Error()
+    void Error() const
     {
         cout << endl;
         cout << "无效输入，请重新输入" << endl;

@@ -15,7 +15,7 @@ string getCurrentDateTime()
 class BookManager
 {
 public:
-    Book getBook(string title)
+    Book getBook(const string &title) const
     {
         string filePath = "./data/book/" + utf8_to_gbk(title) + ".txt";
         if (!ifstream(filePath))
@@ -48,7 +48,7 @@ public:
         }
     }
 
-    vector<Book> searchBook(string keyword)
+    vector<Book> searchBook(const string &keyword) const
     {
         vector<Book> results;
         string directory = "./data/book/";
@@ -84,7 +84,7 @@ public:
         return results;
     }
 
-    vector<Book> tenHotBooks()
+    vector<Book> tenHotBooks() const
     {
         vector<Book> results;
         string directory = "./data/book/";
@@ -122,7 +122,7 @@ public:
         return results;
     }
 
-    int deleteAllBooks()
+    int deleteAllBooks() const
     {
         string directory = "./data/book/";
         for (const auto &entry : filesystem::directory_iterator(directory))
@@ -138,7 +138,7 @@ public:
 class UserManager
 {
 public:
-    User getUser(string name)
+    User getUser(const string &name) const
     {
         string filePath = "./data/user/" + name + ".txt";
         filePath = utf8_to_gbk(filePath);
@@ -176,7 +176,7 @@ public:
         }
     }
 
-    vector<User> searchUser(string keyword)
+    vector<User> searchUser(const string &keyword) const
     {
         vector<User> results;
         string directory = "./data/user/";
@@ -213,7 +213,7 @@ public:
         return results;
     }
 
-    vector<User> tenActiveUsers()
+    vector<User> tenActiveUsers() const
     {
         vector<User> results;
         string directory = "./data/user/";
@@ -256,7 +256,7 @@ public:
         return results;
     }
 
-    int deleteAllUsers()
+    int deleteAllUsers() const
     {
         string directory = "./data/user/";
         for (const auto &entry : filesystem::directory_iterator(directory))
@@ -272,7 +272,7 @@ public:
 class Manager : public BookManager, public UserManager
 {
 public:
-    int borrowBook(string userName, string bookName)
+    int borrowBook(const string &userName, const string &bookName) const
     {
         Book book = getBook(bookName);
         if (book.title == "")
@@ -295,7 +295,7 @@ public:
         return 1;
     }
 
-    int returnBook(string userName, string bookName)
+    int returnBook(const string &userName, const string &bookName) const
     {
         Book book = getBook(bookName);
         if (book.title == "")

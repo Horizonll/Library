@@ -20,7 +20,7 @@ public:
         : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
     ~User() {}
 
-    int addUser()
+    int addUser() const
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (ifstream(filePath))
@@ -38,7 +38,7 @@ public:
         }
     }
 
-    void saveRecords()
+    void saveRecords() const
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         ofstream file(filePath);
@@ -52,7 +52,7 @@ public:
         file.close();
     }
 
-    int deleteUser()
+    int deleteUser() const
     {
         string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
         if (remove(filePath.c_str()) == 0)
@@ -61,7 +61,7 @@ public:
             return -1;
     }
 
-    int editUser()
+    int editUser() const
     {
         ofstream file("./data/user/" + utf8_to_gbk(this->name) + ".txt");
         if (!file)
@@ -74,10 +74,10 @@ public:
         }
     }
 
-    friend ostream &operator<<(ostream &, User &);
+    friend ostream &operator<<(ostream &, const User &);
 };
 
-ostream &operator<<(ostream &os, User &user)
+ostream &operator<<(ostream &os, const User &user)
 {
     os << "借阅次数：" << user.borrowTimes << endl;
     os << endl;
