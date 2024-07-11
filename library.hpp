@@ -1,13 +1,16 @@
 #include "gui.hpp"
 
+#define FILESYSTEM_BOOK "./data/book/"
+#define FILESYSTEM_USER "./data/user/"
+
 class Library : public GUI
 {
 public:
     void CheckDirectory()
     {
-        if (!filesystem::exists("./data/book/"))
-            filesystem::create_directories("./data/book/");
-        if (!filesystem::exists("./data/user/"))
-            filesystem::create_directories("./data/user/");
+        if (!filesystem::exists(FILESYSTEM_BOOK))
+            filesystem::create_directories(FILESYSTEM_BOOK);
+        if (!filesystem::exists(FILESYSTEM_USER))
+            filesystem::create_directories(FILESYSTEM_USER);
     }
 };
