@@ -1,8 +1,5 @@
 #include "gui.hpp"
 
-#define FILESYSTEM_BOOK "./data/book/"
-#define FILESYSTEM_USER "./data/user/"
-
 class Library : public GUI
 {
 public:

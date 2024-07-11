@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iconv.h>
+#define FILESYSTEM_BOOK "./data/book/"
 
 string utf8_to_gbk(const string &utf8_str)
 {
@@ -62,7 +63,7 @@ public:
 
     virtual int Add() const
     {
-        string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
         if (ifstream(filePath))
             return 0;
         else
@@ -87,7 +88,7 @@ public:
 
     virtual void Save() const
     {
-        string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
         ofstream file(filePath);
         file << this->title << endl;
         file << this->author << endl;
@@ -101,7 +102,7 @@ public:
 
     virtual int Delete() const
     {
-        string filePath = "./data/book/" + utf8_to_gbk(this->title) + ".txt";
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
         if (remove(filePath.c_str()) == 0)
             return 1;
         else
@@ -110,7 +111,7 @@ public:
 
     virtual int Edit() const
     {
-        ofstream file("./data/book/" + utf8_to_gbk(this->title) + ".txt");
+        ofstream file(FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt");
         if (!file)
             return -1;
         else

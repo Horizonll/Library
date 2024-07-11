@@ -1,4 +1,5 @@
 #include <vector>
+#define FILESYSTEM_USER "./data/user/"
 
 struct Record
 {
@@ -22,7 +23,7 @@ public:
 
     virtual int Add() const
     {
-        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
         if (ifstream(filePath))
             return 0;
         else
@@ -40,7 +41,7 @@ public:
 
     virtual void Save() const
     {
-        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
         ofstream file(filePath);
         for (auto record : this->borrowRecords)
         {
@@ -54,7 +55,7 @@ public:
 
     virtual int Delete() const
     {
-        string filePath = "./data/user/" + utf8_to_gbk(this->name) + ".txt";
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
         if (remove(filePath.c_str()) == 0)
             return 1;
         else
@@ -63,7 +64,7 @@ public:
 
     virtual int Edit() const
     {
-        ofstream file("./data/user/" + utf8_to_gbk(this->name) + ".txt");
+        ofstream file(FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt");
         if (!file)
             return -1;
         else

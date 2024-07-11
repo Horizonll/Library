@@ -9,7 +9,7 @@ class BookManager
 public:
     Book getBook(const string &title) const
     {
-        string filePath = "./data/book/" + utf8_to_gbk(title) + ".txt";
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(title) + ".txt";
         if (!ifstream(filePath))
         {
             return Book();
@@ -43,8 +43,7 @@ public:
     vector<Book> searchBook(const string &keyword) const
     {
         vector<Book> results;
-        string directory = "./data/book/";
-        for (const auto &entry : filesystem::directory_iterator(directory))
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_BOOK))
         {
             string filePath = entry.path().string();
             filePath = utf8_to_gbk(filePath);
@@ -79,8 +78,7 @@ public:
     vector<Book> tenHotBooks() const
     {
         vector<Book> results;
-        string directory = "./data/book/";
-        for (const auto &entry : filesystem::directory_iterator(directory))
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_BOOK))
         {
             string filePath = entry.path().string();
             filePath = utf8_to_gbk(filePath);
@@ -116,8 +114,7 @@ public:
 
     int deleteAllBooks() const
     {
-        string directory = "./data/book/";
-        for (const auto &entry : filesystem::directory_iterator(directory))
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_BOOK))
         {
             string filePath = entry.path().string();
             filePath = utf8_to_gbk(filePath);
@@ -132,7 +129,7 @@ class UserManager
 public:
     User getUser(const string &name) const
     {
-        string filePath = "./data/user/" + name + ".txt";
+        string filePath = FILESYSTEM_USER + name + ".txt";
         filePath = utf8_to_gbk(filePath);
         if (!ifstream(filePath))
         {
@@ -171,8 +168,7 @@ public:
     vector<User> searchUser(const string &keyword) const
     {
         vector<User> results;
-        string directory = "./data/user/";
-        for (const auto &entry : filesystem::directory_iterator(directory))
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
         {
             string filePath = entry.path().string();
             filePath = utf8_to_gbk(filePath);
@@ -208,8 +204,7 @@ public:
     vector<User> tenActiveUsers() const
     {
         vector<User> results;
-        string directory = "./data/user/";
-        for (const auto &entry : filesystem::directory_iterator(directory))
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
         {
             string filePath = entry.path().string();
             filePath = utf8_to_gbk(filePath);
@@ -250,8 +245,7 @@ public:
 
     int deleteAllUsers() const
     {
-        string directory = "./data/user/";
-        for (const auto &entry : filesystem::directory_iterator(directory))
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
         {
             string filePath = entry.path().string();
             filePath = utf8_to_gbk(filePath);
