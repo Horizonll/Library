@@ -12,8 +12,8 @@ public:
         cout << endl;
         cout << "              图书管理系统" << endl;
         cout << "---------------------------------------" << endl;
-        cout << "1. 添加书籍            9. 借书" << endl;
-        cout << "2. 删除书籍            10. 还书" << endl;
+        cout << "1. 添加书籍            9. 图书借阅" << endl;
+        cout << "2. 删除书籍            10. 图书归还" << endl;
         cout << "3. 查找书籍            11. 借阅记录" << endl;
         cout << "4. 编辑书籍            12. 十大热门书籍" << endl;
         cout << "5. 添加用户            13. 十大活跃用户" << endl;
@@ -441,7 +441,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "借书" << endl;
+        cout << "图书借阅" << endl;
         cout << endl;
         cout << endl;
         cout << "请输入书名：";
@@ -483,7 +483,7 @@ public:
             cout << "用户不存在" << endl;
             break;
         case 1:
-            cout << "借书成功" << endl;
+            cout << "图书借阅成功" << endl;
             break;
         }
         cout << endl;
@@ -496,7 +496,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "还书" << endl;
+        cout << "图书归还" << endl;
         cout << endl;
         cout << endl;
         cout << "请输入书名：";
@@ -538,7 +538,7 @@ public:
             cout << "用户不存在" << endl;
             break;
         case 1:
-            cout << "还书成功" << endl;
+            cout << "图书归还成功" << endl;
             break;
         }
         cout << endl;
