@@ -1,5 +1,5 @@
-#include <vector>
 #define FILESYSTEM_USER "./data/user/"
+#include <vector>
 
 struct Record
 {
@@ -17,8 +17,7 @@ public:
     int borrowTimes = 0;
 
     User(string Name = "") : name(Name) {}
-    User(const User &user)
-        : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
+    User(const User &user) : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
     ~User() {}
 
     virtual int Add() const

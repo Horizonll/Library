@@ -1,6 +1,6 @@
+#define FILESYSTEM_BOOK "./data/book/"
 #include <fstream>
 #include <iconv.h>
-#define FILESYSTEM_BOOK "./data/book/"
 
 string utf8_to_gbk(const string &utf8_str)
 {
@@ -55,10 +55,8 @@ public:
     int borrowTimes = 0;
     bool isBorrowed = false;
 
-    Book(string Title = "", string Author = "", string Category = "", string Keywords = "", string Summary = "")
-        : title(Title), author(Author), category(Category), keywords(Keywords), summary(Summary) {}
-    Book(const Book &book)
-        : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
+    Book(string Title = "", string Author = "", string Category = "", string Keywords = "", string Summary = "") : title(Title), author(Author), category(Category), keywords(Keywords), summary(Summary) {}
+    Book(const Book &book) : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
     ~Book() {}
 
     virtual int Add() const
