@@ -20,7 +20,7 @@ public:
     User(const User &user) : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
     ~User() {}
 
-    virtual int Add() const
+    int Add() const override
     {
         string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
         if (ifstream(filePath))
@@ -38,7 +38,7 @@ public:
         }
     }
 
-    virtual void Save() const
+    void Save() const override
     {
         string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
         ofstream file(filePath);
@@ -52,7 +52,7 @@ public:
         file.close();
     }
 
-    virtual int Delete() const
+    int Delete() const override
     {
         string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
         if (remove(filePath.c_str()) == 0)
@@ -61,7 +61,7 @@ public:
             return -1;
     }
 
-    virtual int Edit() const
+    int Edit() const override
     {
         ofstream file(FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt");
         if (!file)

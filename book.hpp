@@ -59,7 +59,7 @@ public:
     Book(const Book &book) : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
     ~Book() {}
 
-    virtual int Add() const
+    int Add() const override
     {
         string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
         if (ifstream(filePath))
@@ -84,7 +84,7 @@ public:
         }
     }
 
-    virtual void Save() const
+    void Save() const override
     {
         string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
         ofstream file(filePath);
@@ -98,7 +98,7 @@ public:
         file.close();
     }
 
-    virtual int Delete() const
+    int Delete() const override
     {
         string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
         if (remove(filePath.c_str()) == 0)
@@ -107,7 +107,7 @@ public:
             return -1;
     }
 
-    virtual int Edit() const
+    int Edit() const override
     {
         ofstream file(FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt");
         if (!file)
