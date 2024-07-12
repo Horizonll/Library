@@ -1,3 +1,371 @@
+# 图书管理系统
+
+base.hpp
+
+```cpp
+using namespace std;
+
+class Base
+{
+public:
+    virtual int Add() const = 0;
+    virtual void Save() const = 0;
+    virtual int Delete() const = 0;
+    virtual int Edit() const = 0;
+};
+```
+
+book.hpp
+
+```cpp
+#define FILESYSTEM_BOOK "./data/book/"
+#include <fstream>
+#include <iconv.h>
+
+string utf8_to_gbk(const string &utf8_str)
+{
+    iconv_t cd = iconv_open("GBK", "UTF-8");
+    if (cd == (iconv_t)-1)
+        return "";
+    size_t in_bytes_left = utf8_str.size();
+    size_t out_bytes_left = in_bytes_left * 2;
+    char *in_buf = const_cast<char *>(utf8_str.c_str());
+    char out_buf[out_bytes_left];
+    char *out_buf_start = out_buf;
+    size_t ret = iconv(cd, &in_buf, &in_bytes_left, &out_buf_start, &out_bytes_left);
+    if (ret == (size_t)-1)
+    {
+        iconv_close(cd);
+        return "";
+    }
+    *out_buf_start = '\0';
+    iconv_close(cd);
+    return string(out_buf);
+}
+
+string gbk_to_utf8(const string &gbk_str)
+{
+    iconv_t cd = iconv_open("UTF-8", "GBK");
+    if (cd == (iconv_t)-1)
+        return "";
+    size_t in_bytes_left = gbk_str.size();
+    size_t out_bytes_left = in_bytes_left * 2;
+    char *in_buf = const_cast<char *>(gbk_str.c_str());
+    char out_buf[out_bytes_left];
+    char *out_buf_start = out_buf;
+    size_t ret = iconv(cd, &in_buf, &in_bytes_left, &out_buf_start, &out_bytes_left);
+    if (ret == (size_t)-1)
+    {
+        iconv_close(cd);
+        return "";
+    }
+    *out_buf_start = '\0';
+    iconv_close(cd);
+    return string(out_buf);
+}
+
+class Book : public Base
+{
+public:
+    string title;
+    string author;
+    string category;
+    string keywords;
+    string summary;
+    int borrowTimes = 0;
+    bool isBorrowed = false;
+
+    Book(string Title = "", string Author = "", string Category = "", string Keywords = "", string Summary = "") : title(Title), author(Author), category(Category), keywords(Keywords), summary(Summary) {}
+    Book(const Book &book) : title(book.title), author(book.author), category(book.category), keywords(book.keywords), summary(book.summary), borrowTimes(book.borrowTimes), isBorrowed(book.isBorrowed) {}
+    ~Book() {}
+
+    int Add() const override
+    {
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
+        if (ifstream(filePath))
+            return 0;
+        else
+        {
+            ofstream file(filePath);
+            if (!file)
+                return -1;
+            else
+            {
+                file << this->title << endl;
+                file << this->author << endl;
+                file << this->category << endl;
+                file << this->keywords << endl;
+                file << this->summary << endl;
+                file << this->isBorrowed << endl;
+                file << this->borrowTimes << endl;
+                file.close();
+                return 1;
+            }
+        }
+    }
+
+    void Save() const override
+    {
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
+        ofstream file(filePath);
+        file << this->title << endl;
+        file << this->author << endl;
+        file << this->category << endl;
+        file << this->keywords << endl;
+        file << this->summary << endl;
+        file << this->isBorrowed << endl;
+        file << this->borrowTimes << endl;
+        file.close();
+    }
+
+    int Delete() const override
+    {
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt";
+        if (remove(filePath.c_str()) == 0)
+            return 1;
+        else
+            return -1;
+    }
+
+    int Edit() const override
+    {
+        ofstream file(FILESYSTEM_BOOK + utf8_to_gbk(this->title) + ".txt");
+        if (!file)
+            return -1;
+        else
+        {
+            this->Save();
+            file.close();
+            return 1;
+        }
+    }
+
+    friend ostream &operator<<(ostream &, const Book &);
+};
+
+ostream &operator<<(ostream &os, const Book &book)
+{
+    os << "书名：" << book.title << endl;
+    os << "作者：" << book.author << endl;
+    os << "分类：" << book.category << endl;
+    os << "关键词：" << book.keywords << endl;
+    os << "简介：" << book.summary << endl;
+    if (book.isBorrowed)
+        os << "借出状态：已借出" << endl;
+    else
+        os << "借出状态：未借出" << endl;
+    os << "借出次数：" << book.borrowTimes << endl;
+    return os;
+}
+```
+
+user.hpp
+
+```cpp
+#define FILESYSTEM_USER "./data/user/"
+#include <vector>
+
+struct Record
+{
+    string bookName = "";
+    string borrowTime = "";
+    string returnTime = "";
+    bool isReturned = false;
+};
+
+class User : public Base
+{
+public:
+    string name;
+    vector<Record> borrowRecords;
+    int borrowTimes = 0;
+
+    User(string Name = "") : name(Name) {}
+    User(const User &user) : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
+    ~User() {}
+
+    int Add() const override
+    {
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
+        if (ifstream(filePath))
+            return 0;
+        else
+        {
+            ofstream file(filePath);
+            if (!file)
+                return -1;
+            else
+            {
+                file.close();
+                return 1;
+            }
+        }
+    }
+
+    void Save() const override
+    {
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
+        ofstream file(filePath);
+        for (auto record : this->borrowRecords)
+        {
+            file << record.bookName << endl;
+            file << record.borrowTime << endl;
+            file << record.returnTime << endl;
+            file << record.isReturned << endl;
+        }
+        file.close();
+    }
+
+    int Delete() const override
+    {
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
+        if (remove(filePath.c_str()) == 0)
+            return 1;
+        else
+            return -1;
+    }
+
+    int Edit() const override
+    {
+        ofstream file(FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt");
+        if (!file)
+            return -1;
+        else
+        {
+            this->Save();
+            file.close();
+            return 1;
+        }
+    }
+
+    friend ostream &operator<<(ostream &, const User &);
+};
+
+ostream &operator<<(ostream &os, const User &user)
+{
+    os << "借阅次数：" << user.borrowTimes << endl;
+    os << endl;
+    os << "借阅记录：" << endl;
+    os << endl;
+    for (auto record : user.borrowRecords)
+    {
+        os << "书名：" << record.bookName << endl;
+        os << "借书时间：" << record.borrowTime << endl;
+        if (record.isReturned)
+            os << "还书时间：" << record.returnTime << endl;
+        else
+            os << "还书时间：未还" << endl;
+        os << endl;
+    }
+    return os;
+}
+```
+
+manager.hpp
+
+```cpp
+#define FILESYSTEM_USER "./data/user/"
+#include <vector>
+
+struct Record
+{
+    string bookName = "";
+    string borrowTime = "";
+    string returnTime = "";
+    bool isReturned = false;
+};
+
+class User : public Base
+{
+public:
+    string name;
+    vector<Record> borrowRecords;
+    int borrowTimes = 0;
+
+    User(string Name = "") : name(Name) {}
+    User(const User &user) : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
+    ~User() {}
+
+    int Add() const override
+    {
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
+        if (ifstream(filePath))
+            return 0;
+        else
+        {
+            ofstream file(filePath);
+            if (!file)
+                return -1;
+            else
+            {
+                file.close();
+                return 1;
+            }
+        }
+    }
+
+    void Save() const override
+    {
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
+        ofstream file(filePath);
+        for (auto record : this->borrowRecords)
+        {
+            file << record.bookName << endl;
+            file << record.borrowTime << endl;
+            file << record.returnTime << endl;
+            file << record.isReturned << endl;
+        }
+        file.close();
+    }
+
+    int Delete() const override
+    {
+        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
+        if (remove(filePath.c_str()) == 0)
+            return 1;
+        else
+            return -1;
+    }
+
+    int Edit() const override
+    {
+        ofstream file(FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt");
+        if (!file)
+            return -1;
+        else
+        {
+            this->Save();
+            file.close();
+            return 1;
+        }
+    }
+
+    friend ostream &operator<<(ostream &, const User &);
+};
+
+ostream &operator<<(ostream &os, const User &user)
+{
+    os << "借阅次数：" << user.borrowTimes << endl;
+    os << endl;
+    os << "借阅记录：" << endl;
+    os << endl;
+    for (auto record : user.borrowRecords)
+    {
+        os << "书名：" << record.bookName << endl;
+        os << "借书时间：" << record.borrowTime << endl;
+        if (record.isReturned)
+            os << "还书时间：" << record.returnTime << endl;
+        else
+            os << "还书时间：未还" << endl;
+        os << endl;
+    }
+    return os;
+}
+```
+
+gui.hpp
+
+```cpp
 #include "manager.hpp"
 #include <conio.h>
 #include <iostream>
@@ -129,18 +497,6 @@ public:
             return;
         }
         Book book(title);
-        cout << "确认删除？(y/n)";
-        string c;
-        getline(cin, c);
-        cout << endl;
-        if (c != "y")
-        {
-            cout << "取消删除" << endl;
-            cout << endl;
-            cout << "按任意键返回" << endl;
-            getch();
-            return;
-        }
         int result = book.Delete();
         switch (result)
         {
@@ -341,18 +697,6 @@ public:
             return;
         }
         User user(name);
-        cout << "确认删除？(y/n)";
-        string c;
-        getline(cin, c);
-        cout << endl;
-        if (c != "y")
-        {
-            cout << "取消删除" << endl;
-            cout << endl;
-            cout << "按任意键返回" << endl;
-            getch();
-            return;
-        }
         int result = user.Delete();
         switch (result)
         {
@@ -735,3 +1079,132 @@ public:
         cout << "无效输入，请重新输入" << endl;
     }
 };
+```
+
+library.hpp
+
+```cpp
+#include "gui.hpp"
+
+class Library : public GUI
+{
+public:
+    void CheckDirectory()
+    {
+        if (!filesystem::exists(FILESYSTEM_BOOK))
+            filesystem::create_directories(FILESYSTEM_BOOK);
+        if (!filesystem::exists(FILESYSTEM_USER))
+            filesystem::create_directories(FILESYSTEM_USER);
+    }
+};
+```
+
+main.cpp
+
+```cpp
+#include "library.hpp"
+
+enum Choice
+{
+    AddBook = 1,
+    DeleteBook,
+    SearchBook,
+    EditBook,
+    AddUser,
+    DeleteUser,
+    SearchUser,
+    EditUser,
+    BorrowBook,
+    ReturnBook,
+    BorrowRecord,
+    TenHotBooks,
+    TenActiveUsers,
+    DeleteAllBooks,
+    DeleteAllUsers,
+    Exit
+};
+
+bool IsPureNumber(const string &input)
+{
+    return all_of(input.begin(), input.end(), ::isdigit);
+}
+
+int main()
+{
+    Library library;
+    bool error = false;
+    system("chcp 65001");
+
+    while (true)
+    {
+        library.CheckDirectory();
+        library.ShowMenu();
+        if (error)
+            library.Error();
+
+        string input;
+        int choice;
+        getline(cin, input);
+        if (!IsPureNumber(input) ||
+            input.empty() ||
+            (choice = stoi(input)) > Exit || choice < AddBook)
+        {
+            error = true;
+            continue;
+        }
+
+        switch (choice)
+        {
+        case AddBook:
+            library.AddBook();
+            break;
+        case DeleteBook:
+            library.DeleteBook();
+            break;
+        case SearchBook:
+            library.SearchBook();
+            break;
+        case EditBook:
+            library.EditBook();
+            break;
+        case AddUser:
+            library.AddUser();
+            break;
+        case DeleteUser:
+            library.DeleteUser();
+            break;
+        case SearchUser:
+            library.SearchUser();
+            break;
+        case EditUser:
+            library.EditUser();
+            break;
+        case BorrowBook:
+            library.BorrowBook();
+            break;
+        case ReturnBook:
+            library.ReturnBook();
+            break;
+        case BorrowRecord:
+            library.BorrowRecord();
+            break;
+        case TenHotBooks:
+            library.TenHotBooks();
+            break;
+        case TenActiveUsers:
+            library.TenActiveUsers();
+            break;
+        case DeleteAllBooks:
+            library.DeleteAllBooks();
+            break;
+        case DeleteAllUsers:
+            library.DeleteAllUsers();
+            break;
+        case Exit:
+            library.Exit();
+        }
+        error = false;
+    }
+    return 0;
+}
+```
