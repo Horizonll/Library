@@ -1,3 +1,11 @@
+/**
+ * @file base.hpp
+ * @brief 包含字符串编码转换、字符串检查和基类定义的头文件。
+ *
+ * 此文件定义了两个主要的字符串编码转换函数(utf8_to_gbk, gbk_to_utf8)，
+ * 一个字符串检查函数(IsPureNumber)以及一个用于演示虚函数概念的基类(Base)。
+ */
+
 #pragma once
 #include <iconv.h>
 #include <filesystem>
@@ -9,6 +17,12 @@
 
 using namespace std;
 
+/**
+ * 将UTF-8编码的字符串转换为GBK编码。
+ *
+ * @param utf8_str UTF-8编码的字符串。
+ * @return 转换后的GBK编码字符串。如果转换失败，返回空字符串。
+ */
 string utf8_to_gbk(const string &utf8_str)
 {
     iconv_t cd = iconv_open("GBK", "UTF-8");
@@ -30,6 +44,12 @@ string utf8_to_gbk(const string &utf8_str)
     return string(out_buf);
 }
 
+/**
+ * 将GBK编码的字符串转换为UTF-8编码。
+ *
+ * @param gbk_str GBK编码的字符串。
+ * @return 转换后的UTF-8编码字符串。如果转换失败，返回空字符串。
+ */
 string gbk_to_utf8(const string &gbk_str)
 {
     iconv_t cd = iconv_open("UTF-8", "GBK");
@@ -51,16 +71,46 @@ string gbk_to_utf8(const string &gbk_str)
     return string(out_buf);
 }
 
+/**
+ * 检查字符串是否全部由数字组成。
+ *
+ * @param input 待检查的字符串。
+ * @return 如果字符串全部由数字组成，则返回true；否则返回false。
+ */
 bool IsPureNumber(const string &input)
 {
     return all_of(input.begin(), input.end(), ::isdigit);
 }
 
+/**
+ * 基类，定义了一组接口，用于演示虚函数的概念。
+ */
 class Base
 {
 public:
+    /**
+     * 纯虚函数，要求派生类实现加法操作。
+     *
+     * @return 加法操作的结果。
+     */
     virtual int Add() const = 0;
+
+    /**
+     * 纯虚函数，要求派生类实现保存操作。
+     */
     virtual void Save() const = 0;
+
+    /**
+     * 纯虚函数，要求派生类实现删除操作。
+     *
+     * @return 删除操作的结果。
+     */
     virtual int Delete() const = 0;
+
+    /**
+     * 纯虚函数，要求派生类实现编辑操作。
+     *
+     * @return 编辑操作的结果。
+     */
     virtual int Edit() const = 0;
 };

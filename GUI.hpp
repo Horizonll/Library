@@ -1,8 +1,23 @@
+/**
+ * @file GUI.hpp
+ * @brief 图书管理系统的图形用户界面(GUI)类定义文件。
+ * 该文件包含GUI类的定义。GUI类继承自Manager类，提供了图书管理系统的用户界面功能，包括显示菜单、添加/删除/查找/编辑图书和用户等操作的界面显示和交互。
+ */
+
 #include "manager.hpp"
 
+/**
+ * @class GUI GUI.hpp "GUI.hpp"
+ * @brief 图书管理系统的图形用户界面(GUI)类。
+ * GUI类提供了图书管理系统的所有用户界面功能。它允许用户通过文本菜单进行操作，如添加、删除、查找和编辑图书和用户信息。该类继承自Manager类，使用继承而来的方法来执行用户请求的操作。
+ */
 class GUI : public Manager
 {
 public:
+    /**
+     * @brief 显示主菜单。
+     * 该方法清屏并显示图书管理系统的主菜单，包括所有可用的操作选项。
+     */
     void ShowMenu() const
     {
         system("cls");
@@ -23,6 +38,11 @@ public:
         cout << "请选择操作：";
     }
 
+    /**
+     * @brief 移除字符串前后的空白字符。
+     * @param str 输入的字符串。
+     * @return 移除前后空白字符后的字符串。
+     */
     string RemoveBlank(const string &str) const
     {
         auto start = str.find_first_not_of(" \t\n\r\f\v");
@@ -32,11 +52,19 @@ public:
         return str.substr(start, end - start + 1);
     }
 
+    /**
+     * @brief 显示单本图书的详细信息。
+     * @param book 要显示的图书对象。
+     */
     void DisplayBook(const Book &book) const
     {
         cout << book;
     }
 
+    /**
+     * @brief 添加新图书的界面和逻辑。
+     * 该方法引导用户通过一系列提示输入新图书的详细信息，然后尝试添加图书到系统中。
+     */
     void AddBook() const
     {
         system("cls");
@@ -97,6 +125,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 删除图书的界面和逻辑。
+     * 该方法提示用户输入要删除的图书名称，然后尝试从系统中删除指定的图书。
+     */
     void DeleteBook() const
     {
         system("cls");
@@ -154,6 +186,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 查找图书的界面和逻辑。
+     * 该方法提示用户输入搜索词（书名），然后显示所有匹配的图书信息。
+     */
     void SearchBook() const
     {
         system("cls");
@@ -189,6 +225,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 编辑图书信息的界面和逻辑。
+     * 该方法首先提示用户输入要编辑的图书名称，然后允许用户修改图书的详细信息。
+     */
     void EditBook() const
     {
         system("cls");
@@ -265,11 +305,19 @@ public:
         getch();
     }
 
+    /**
+     * @brief 显示单个用户的详细信息。
+     * @param user 要显示的用户对象。
+     */
     void DisplayUser(const User &user) const
     {
         cout << user;
     }
 
+    /**
+     * @brief 添加新用户的界面和逻辑。
+     * 该方法引导用户通过一系列提示输入新用户的详细信息，然后尝试添加用户到系统中。
+     */
     void AddUser() const
     {
         system("cls");
@@ -309,6 +357,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 删除用户的界面和逻辑。
+     * 该方法提示用户输入要删除的用户名，然后尝试从系统中删除指定的用户。
+     */
     void DeleteUser() const
     {
         system("cls");
@@ -366,6 +418,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 搜索用户。
+     * 清屏并提示用户输入用户名，根据输入搜索用户。如果未输入用户名，则显示所有用户。根据搜索结果，显示用户信息或提示用户不存在。
+     */
     void SearchUser() const
     {
         system("cls");
@@ -399,6 +455,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 编辑用户。
+     * 清屏并提示用户输入用户名，然后输入新的用户名进行更新。如果用户存在，则更新用户信息；否则，提示用户不存在。
+     */
     void EditUser() const
     {
         system("cls");
@@ -458,6 +518,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 借阅图书。
+     * 清屏并提示用户输入书名和用户名，然后尝试借阅图书。根据操作结果，显示相应的提示信息。
+     */
     void BorrowBook() const
     {
         system("cls");
@@ -513,6 +577,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 归还图书。
+     * 清屏并提示用户输入书名和用户名，然后尝试归还图书。根据操作结果，显示相应的提示信息。
+     */
     void ReturnBook() const
     {
         system("cls");
@@ -568,6 +636,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 查看借阅记录。
+     * 清屏并提示用户输入用户名，然后显示该用户的借阅记录。如果用户不存在，显示相应的提示信息。
+     */
     void BorrowRecord() const
     {
         system("cls");
@@ -604,6 +676,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 查看十大热门图书。
+     * 清屏并显示当前图书馆系统中借阅次数最多的十本图书。
+     */
     void TenHotBooks() const
     {
         system("cls");
@@ -632,6 +708,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 查看十大活跃用户。
+     * 清屏并显示当前图书馆系统中借阅图书次数最多的十名用户。
+     */
     void TenActiveUsers() const
     {
         system("cls");
@@ -660,6 +740,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 删除所有图书。
+     * 清屏并提示用户确认是否删除所有图书。根据用户的选择，执行删除操作或取消。
+     */
     void DeleteAllBooks() const
     {
         system("cls");
@@ -691,6 +775,10 @@ public:
         getch();
     }
 
+    /**
+     * @brief 删除所有用户。
+     * 清屏并提示用户确认是否删除所有用户。根据用户的选择，执行删除操作或取消。
+     */
     void DeleteAllUsers() const
     {
         system("cls");
@@ -722,11 +810,19 @@ public:
         getch();
     }
 
+    /**
+     * @brief 退出程序。
+     * 安全退出图书馆系统。
+     */
     void Exit() const
     {
         exit(0);
     }
 
+    /**
+     * @brief 显示错误信息。
+     * 当用户输入无效时，显示错误信息并提示重新输入。
+     */
     void Error() const
     {
         cout << endl;

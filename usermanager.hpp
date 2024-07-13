@@ -1,8 +1,25 @@
+/**
+ * @file usermanager.hpp
+ * @brief 用户管理类定义文件
+ * 提供了对用户信息进行管理的类，包括获取单个用户信息、搜索用户、获取活跃用户列表和删除所有用户等功能。
+ */
+
 #include "user.hpp"
 
+/**
+ * @class UserManager
+ * @brief 用户管理类
+ * 用于管理用户信息，包括获取、搜索、列出活跃用户和删除用户等操作。
+ */
 class UserManager
 {
 public:
+    /**
+     * 根据用户名从文件系统中读取用户信息，包括借阅记录等，并返回一个用户对象。
+     * @brief 获取单个用户的信息
+     * @param name 用户名
+     * @return User 用户对象，如果用户不存在则返回空的用户对象
+     */
     User getUser(const string &name) const
     {
         string filePath = FILESYSTEM_USER + name + ".txt";
@@ -41,6 +58,12 @@ public:
         }
     }
 
+    /**
+     * 在所有用户中搜索包含指定关键字的用户名，并返回一个包含这些用户的列表。
+     * @brief 搜索包含关键字的用户列表
+     * @param keyword 搜索关键字
+     * @return vector<User> 包含关键字的用户列表
+     */
     vector<User> searchUser(const string &keyword) const
     {
         vector<User> results;
@@ -77,6 +100,11 @@ public:
         return results;
     }
 
+    /**
+     * 根据用户的借阅次数，获取最活跃的用户列表，列表最多包含10个用户。
+     * @brief 获取最活跃的用户列表
+     * @return vector<User> 最活跃的用户列表，最多10个
+     */
     vector<User> tenActiveUsers() const
     {
         vector<User> results;
@@ -119,6 +147,11 @@ public:
         return results;
     }
 
+    /**
+     * 删除文件系统中所有用户的信息。
+     * @brief 删除所有用户
+     * @return int 操作结果，成功返回1，失败返回0
+     */
     int deleteAllUsers() const
     {
         for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
