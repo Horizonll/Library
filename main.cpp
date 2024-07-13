@@ -1,10 +1,5 @@
 #include "library.hpp"
 
-bool IsPureNumber(const string &input)
-{
-    return all_of(input.begin(), input.end(), ::isdigit);
-}
-
 int main()
 {
     Library library;

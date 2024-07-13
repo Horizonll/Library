@@ -1,6 +1,4 @@
 #include "manager.hpp"
-#include <conio.h>
-#include <iostream>
 
 class GUI : public Manager
 {

@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <vector>
 #include <fstream>
+#include <iostream>
+#include <conio.h>
 
 using namespace std;
 
@@ -47,6 +49,11 @@ string gbk_to_utf8(const string &gbk_str)
     *out_buf_start = '\0';
     iconv_close(cd);
     return string(out_buf);
+}
+
+bool IsPureNumber(const string &input)
+{
+    return all_of(input.begin(), input.end(), ::isdigit);
 }
 
 class Base
