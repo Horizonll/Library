@@ -497,6 +497,18 @@ public:
             return;
         }
         Book book(title);
+        cout << "确认删除？(y/n)";
+        string c;
+        getline(cin, c);
+        cout << endl;
+        if (c != "y")
+        {
+            cout << "取消删除" << endl;
+            cout << endl;
+            cout << "按任意键返回" << endl;
+            getch();
+            return;
+        }
         int result = book.Delete();
         switch (result)
         {
@@ -697,6 +709,18 @@ public:
             return;
         }
         User user(name);
+        cout << "确认删除？(y/n)";
+        string c;
+        getline(cin, c);
+        cout << endl;
+        if (c != "y")
+        {
+            cout << "取消删除" << endl;
+            cout << endl;
+            cout << "按任意键返回" << endl;
+            getch();
+            return;
+        }
         int result = user.Delete();
         switch (result)
         {
