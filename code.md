@@ -1,24 +1,16 @@
 base.hpp
 
 ```cpp
-using namespace std;
-
-class Base
-{
-public:
-    virtual int Add() const = 0;
-    virtual void Save() const = 0;
-    virtual int Delete() const = 0;
-    virtual int Edit() const = 0;
-};
-```
-
-book.hpp
-
-```cpp
-#define FILESYSTEM_BOOK "./data/book/"
-#include <fstream>
+#pragma once
 #include <iconv.h>
+#include <filesystem>
+#include <algorithm>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
 
 string utf8_to_gbk(const string &utf8_str)
 {
@@ -61,6 +53,27 @@ string gbk_to_utf8(const string &gbk_str)
     iconv_close(cd);
     return string(out_buf);
 }
+
+bool IsPureNumber(const string &input)
+{
+    return all_of(input.begin(), input.end(), ::isdigit);
+}
+
+class Base
+{
+public:
+    virtual int Add() const = 0;
+    virtual void Save() const = 0;
+    virtual int Delete() const = 0;
+    virtual int Edit() const = 0;
+};
+```
+
+book.hpp
+
+```cpp
+#define FILESYSTEM_BOOK "./data/book/"
+#include "base.hpp"
 
 class Book : public Base
 {
@@ -161,7 +174,7 @@ user.hpp
 
 ```cpp
 #define FILESYSTEM_USER "./data/user/"
-#include <vector>
+#include "base.hpp"
 
 struct Record
 {
@@ -259,14 +272,10 @@ ostream &operator<<(ostream &os, const User &user)
 }
 ```
 
-manager.hpp
+bookmanager.hpp
 
 ```cpp
-#include "base.hpp"
 #include "book.hpp"
-#include "user.hpp"
-#include <filesystem>
-#include <algorithm>
 
 class BookManager
 {
@@ -387,6 +396,12 @@ public:
         return 1;
     }
 };
+```
+
+usermanager.hpp
+
+```cpp
+#include "user.hpp"
 
 class UserManager
 {
@@ -518,6 +533,13 @@ public:
         return 1;
     }
 };
+```
+
+manager.hpp
+
+```cpp
+#include "bookmanager.hpp"
+#include "usermanager.hpp"
 
 class Manager : public BookManager, public UserManager
 {
@@ -584,8 +606,6 @@ gui.hpp
 
 ```cpp
 #include "manager.hpp"
-#include <conio.h>
-#include <iostream>
 
 class GUI : public Manager
 {
@@ -1364,11 +1384,6 @@ main.cpp
 
 ```cpp
 #include "library.hpp"
-
-bool IsPureNumber(const string &input)
-{
-    return all_of(input.begin(), input.end(), ::isdigit);
-}
 
 int main()
 {
