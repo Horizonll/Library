@@ -10,12 +10,12 @@ public:
         cout << endl;
         cout << "              图书管理系统" << endl;
         cout << "---------------------------------------" << endl;
-        cout << "1. 添加书籍            9. 图书借阅" << endl;
-        cout << "2. 删除书籍            10. 图书归还" << endl;
-        cout << "3. 查找书籍            11. 借阅记录" << endl;
-        cout << "4. 编辑书籍            12. 十大热门书籍" << endl;
+        cout << "1. 添加图书            9. 图书借阅" << endl;
+        cout << "2. 删除图书            10. 图书归还" << endl;
+        cout << "3. 查找图书            11. 借阅记录" << endl;
+        cout << "4. 编辑图书            12. 十大热门图书" << endl;
         cout << "5. 添加用户            13. 十大活跃用户" << endl;
-        cout << "6. 删除用户            14. 删除所有书籍" << endl;
+        cout << "6. 删除用户            14. 删除所有图书" << endl;
         cout << "7. 查找用户            15. 删除所有用户" << endl;
         cout << "8. 编辑用户            16. 退出" << endl;
         cout << "---------------------------------------" << endl;
@@ -43,7 +43,7 @@ public:
         Book book;
         cout << endl;
         cout << endl;
-        cout << "添加书籍" << endl;
+        cout << "添加图书" << endl;
         cout << endl;
         cout << endl;
         cout << "请输入书名：";
@@ -60,7 +60,7 @@ public:
         }
         else if (getBook(book.title).title == book.title)
         {
-            cout << "书籍已存在" << endl;
+            cout << "图书已存在" << endl;
             cout << endl;
             cout << "按任意键返回" << endl;
             getch();
@@ -83,7 +83,7 @@ public:
         switch (result)
         {
         case 0:
-            cout << "书籍已存在" << endl;
+            cout << "图书已存在" << endl;
             break;
         case -1:
             cout << "保存失败" << endl;
@@ -102,7 +102,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "删除书籍" << endl;
+        cout << "删除图书" << endl;
         cout << endl;
         cout << endl;
         cout << "请输入书名：";
@@ -120,7 +120,7 @@ public:
         }
         if (getBook(title).title.empty())
         {
-            cout << "书籍不存在" << endl;
+            cout << "图书不存在" << endl;
             cout << endl;
             cout << "按任意键返回" << endl;
             getch();
@@ -159,10 +159,10 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "查找书籍" << endl;
+        cout << "查找图书" << endl;
         cout << endl;
         cout << endl;
-        cout << "请输入搜索词（回车显示所有书籍）：";
+        cout << "请输入搜索词（回车显示所有图书）：";
         string title;
         getline(cin, title);
         title = RemoveBlank(title);
@@ -174,12 +174,12 @@ public:
         switch (result)
         {
         case 0:
-            cout << "书籍不存在" << endl;
+            cout << "图书不存在" << endl;
             break;
         case 1:
             for (int i = 0; i < books.size(); i++)
             {
-                cout << "书籍" << i + 1 << endl;
+                cout << "图书" << i + 1 << endl;
                 DisplayBook(books[i]);
                 cout << endl;
             }
@@ -194,7 +194,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "编辑书籍" << endl;
+        cout << "编辑图书" << endl;
         cout << endl;
         cout << endl;
         cout << "请输入书名：";
@@ -215,7 +215,7 @@ public:
         switch (result)
         {
         case 0:
-            cout << "书籍不存在" << endl;
+            cout << "图书不存在" << endl;
             break;
         case 1:
             DisplayBook(oldBook);
@@ -496,10 +496,10 @@ public:
         switch (result)
         {
         case 0:
-            cout << "书籍不存在" << endl;
+            cout << "图书不存在" << endl;
             break;
         case -1:
-            cout << "书籍已借出" << endl;
+            cout << "图书已借出" << endl;
             break;
         case -2:
             cout << "用户不存在" << endl;
@@ -551,10 +551,10 @@ public:
         switch (result)
         {
         case 0:
-            cout << "书籍不存在" << endl;
+            cout << "图书不存在" << endl;
             break;
         case -1:
-            cout << "未借此书籍" << endl;
+            cout << "未借此图书" << endl;
             break;
         case -2:
             cout << "用户不存在" << endl;
@@ -609,7 +609,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "十大热门书籍" << endl;
+        cout << "十大热门图书" << endl;
         cout << endl;
         cout << endl;
         vector<Book> books = tenHotBooks();
@@ -623,7 +623,7 @@ public:
         }
         for (int i = 0; i < books.size(); i++)
         {
-            cout << "书籍" << i + 1 << endl;
+            cout << "图书" << i + 1 << endl;
             DisplayBook(books[i]);
             cout << endl;
         }
@@ -665,7 +665,7 @@ public:
         system("cls");
         cout << endl;
         cout << endl;
-        cout << "确认删除所有书籍？(y/n)";
+        cout << "确认删除所有图书？(y/n)";
         string c;
         getline(cin, c);
         cout << endl;
