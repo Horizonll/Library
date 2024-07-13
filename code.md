@@ -1,5 +1,3 @@
-# 图书管理系统
-
 base.hpp
 
 ```cpp
@@ -264,103 +262,322 @@ ostream &operator<<(ostream &os, const User &user)
 manager.hpp
 
 ```cpp
-#define FILESYSTEM_USER "./data/user/"
-#include <vector>
+#include "base.hpp"
+#include "book.hpp"
+#include "user.hpp"
+#include <filesystem>
+#include <algorithm>
 
-struct Record
-{
-    string bookName = "";
-    string borrowTime = "";
-    string returnTime = "";
-    bool isReturned = false;
-};
-
-class User : public Base
+class BookManager
 {
 public:
-    string name;
-    vector<Record> borrowRecords;
-    int borrowTimes = 0;
-
-    User(string Name = "") : name(Name) {}
-    User(const User &user) : name(user.name), borrowRecords(user.borrowRecords), borrowTimes(user.borrowTimes) {}
-    ~User() {}
-
-    int Add() const override
+    Book getBook(const string &title) const
     {
-        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
-        if (ifstream(filePath))
-            return 0;
+        string filePath = FILESYSTEM_BOOK + utf8_to_gbk(title) + ".txt";
+        if (!ifstream(filePath))
+        {
+            return Book();
+        }
         else
         {
-            ofstream file(filePath);
+            ifstream file(filePath);
             if (!file)
-                return -1;
+            {
+                return Book();
+            }
             else
             {
+                Book book;
+                getline(file, book.title);
+                getline(file, book.author);
+                getline(file, book.category);
+                getline(file, book.keywords);
+                getline(file, book.summary);
+                string line;
+                getline(file, line);
+                book.isBorrowed = (line == "1");
+                getline(file, line);
+                book.borrowTimes = stoi(line);
                 file.close();
-                return 1;
+                return book;
             }
         }
     }
 
-    void Save() const override
+    vector<Book> searchBook(const string &keyword) const
     {
-        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
-        ofstream file(filePath);
-        for (auto record : this->borrowRecords)
+        vector<Book> results;
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_BOOK))
         {
-            file << record.bookName << endl;
-            file << record.borrowTime << endl;
-            file << record.returnTime << endl;
-            file << record.isReturned << endl;
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
+            {
+                Book book;
+                getline(file, book.title);
+                getline(file, book.author);
+                getline(file, book.category);
+                getline(file, book.keywords);
+                getline(file, book.summary);
+                string line;
+                getline(file, line);
+                book.isBorrowed = (line == "1");
+                getline(file, line);
+                book.borrowTimes = stoi(line);
+                file.close();
+                if (book.title.find(keyword) != string::npos ||
+                    book.author.find(keyword) != string::npos ||
+                    book.category.find(keyword) != string::npos ||
+                    book.keywords.find(keyword) != string::npos ||
+                    book.summary.find(keyword) != string::npos)
+                {
+                    results.push_back(book);
+                }
+            }
         }
-        file.close();
+        return results;
     }
 
-    int Delete() const override
+    vector<Book> tenHotBooks() const
     {
-        string filePath = FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt";
-        if (remove(filePath.c_str()) == 0)
-            return 1;
-        else
-            return -1;
-    }
-
-    int Edit() const override
-    {
-        ofstream file(FILESYSTEM_USER + utf8_to_gbk(this->name) + ".txt");
-        if (!file)
-            return -1;
-        else
+        vector<Book> results;
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_BOOK))
         {
-            this->Save();
-            file.close();
-            return 1;
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
+            {
+                Book book;
+                getline(file, book.title);
+                getline(file, book.author);
+                getline(file, book.category);
+                getline(file, book.keywords);
+                getline(file, book.summary);
+                string line;
+                getline(file, line);
+                book.isBorrowed = (line == "1");
+                getline(file, line);
+                book.borrowTimes = stoi(line);
+                file.close();
+                if (book.borrowTimes > 0)
+                {
+                    results.push_back(book);
+                }
+            }
         }
+        sort(results.begin(), results.end(), [](Book a, Book b)
+             { return a.borrowTimes > b.borrowTimes; });
+        if (results.size() > 10)
+        {
+            results.resize(10);
+        }
+        return results;
     }
 
-    friend ostream &operator<<(ostream &, const User &);
+    int deleteAllBooks() const
+    {
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_BOOK))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            remove(filePath.c_str());
+        }
+        return 1;
+    }
 };
 
-ostream &operator<<(ostream &os, const User &user)
+class UserManager
 {
-    os << "借阅次数：" << user.borrowTimes << endl;
-    os << endl;
-    os << "借阅记录：" << endl;
-    os << endl;
-    for (auto record : user.borrowRecords)
+public:
+    User getUser(const string &name) const
     {
-        os << "书名：" << record.bookName << endl;
-        os << "借书时间：" << record.borrowTime << endl;
-        if (record.isReturned)
-            os << "还书时间：" << record.returnTime << endl;
+        string filePath = FILESYSTEM_USER + name + ".txt";
+        filePath = utf8_to_gbk(filePath);
+        if (!ifstream(filePath))
+        {
+            return User();
+        }
         else
-            os << "还书时间：未还" << endl;
-        os << endl;
+        {
+            ifstream file(filePath);
+            if (!file)
+            {
+                return User();
+            }
+            else
+            {
+                User user(name);
+                string line;
+                while (getline(file, line))
+                {
+                    Record record;
+                    record.bookName = line;
+                    getline(file, line);
+                    record.borrowTime = line;
+                    getline(file, line);
+                    record.returnTime = line;
+                    getline(file, line);
+                    record.isReturned = (line == "1");
+                    user.borrowRecords.push_back(record);
+                }
+                user.borrowTimes = user.borrowRecords.size();
+                file.close();
+                return user;
+            }
+        }
     }
-    return os;
-}
+
+    vector<User> searchUser(const string &keyword) const
+    {
+        vector<User> results;
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
+            {
+                User user;
+                user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
+                string line;
+                while (getline(file, line))
+                {
+                    Record record;
+                    record.bookName = line;
+                    getline(file, line);
+                    record.borrowTime = line;
+                    getline(file, line);
+                    record.returnTime = line;
+                    getline(file, line);
+                    record.isReturned = (line == "1");
+                    user.borrowRecords.push_back(record);
+                }
+                user.borrowTimes = user.borrowRecords.size();
+                file.close();
+                if (user.name.find(keyword) != string::npos)
+                {
+                    results.push_back(user);
+                }
+            }
+        }
+        return results;
+    }
+
+    vector<User> tenActiveUsers() const
+    {
+        vector<User> results;
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            ifstream file(filePath);
+            if (file)
+            {
+                User user;
+                user.name = gbk_to_utf8(filePath.substr(12, filePath.size() - 16));
+                string line;
+                while (getline(file, line))
+                {
+                    Record record;
+                    record.bookName = line;
+                    getline(file, line);
+                    record.borrowTime = line;
+                    getline(file, line);
+                    record.returnTime = line;
+                    getline(file, line);
+                    record.isReturned = (line == "1");
+                    user.borrowRecords.push_back(record);
+                }
+                user.borrowTimes = user.borrowRecords.size();
+                file.close();
+                if (user.borrowTimes > 0)
+                {
+                    results.push_back(user);
+                }
+            }
+        }
+        sort(results.begin(), results.end(), [](User a, User b)
+             { return a.borrowTimes > b.borrowTimes; });
+        if (results.size() > 10)
+        {
+            results.resize(10);
+        }
+        return results;
+    }
+
+    int deleteAllUsers() const
+    {
+        for (const auto &entry : filesystem::directory_iterator(FILESYSTEM_USER))
+        {
+            string filePath = entry.path().string();
+            filePath = utf8_to_gbk(filePath);
+            remove(filePath.c_str());
+        }
+        return 1;
+    }
+};
+
+class Manager : public BookManager, public UserManager
+{
+public:
+    string getCurrentDateTime() const
+    {
+        time_t now = time(0);
+        tm *ltm = localtime(&now);
+        char buffer[80];
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ltm);
+        return buffer;
+    }
+
+    int borrowBook(const string &userName, const string &bookName) const
+    {
+        Book book = getBook(bookName);
+        if (book.title == "")
+            return 0;
+        User user = getUser(userName);
+        if (user.name == "")
+            return -2;
+        if (book.isBorrowed)
+            return -1;
+        Record record;
+        record.bookName = bookName;
+        record.borrowTime = getCurrentDateTime();
+        record.isReturned = false;
+        user.borrowRecords.push_back(record);
+        user.borrowTimes = user.borrowRecords.size();
+        user.Save();
+        book.isBorrowed = true;
+        book.borrowTimes++;
+        book.Save();
+        return 1;
+    }
+
+    int returnBook(const string &userName, const string &bookName) const
+    {
+        Book book = getBook(bookName);
+        if (book.title == "")
+            return 0;
+        User user = getUser(userName);
+        if (user.name == "")
+            return -2;
+        bool found = false;
+        for (auto &record : user.borrowRecords)
+        {
+            if (record.bookName == bookName && !record.isReturned)
+            {
+                record.returnTime = getCurrentDateTime();
+                record.isReturned = true;
+                user.Save();
+                book.isBorrowed = false;
+                book.Save();
+                return 1;
+            }
+        }
+        return -1;
+    }
+};
 ```
 
 gui.hpp
@@ -1110,24 +1327,6 @@ library.hpp
 ```cpp
 #include "gui.hpp"
 
-class Library : public GUI
-{
-public:
-    void CheckDirectory()
-    {
-        if (!filesystem::exists(FILESYSTEM_BOOK))
-            filesystem::create_directories(FILESYSTEM_BOOK);
-        if (!filesystem::exists(FILESYSTEM_USER))
-            filesystem::create_directories(FILESYSTEM_USER);
-    }
-};
-```
-
-main.cpp
-
-```cpp
-#include "library.hpp"
-
 enum Choice
 {
     AddBook = 1,
@@ -1147,6 +1346,24 @@ enum Choice
     DeleteAllUsers,
     Exit
 };
+
+class Library : public GUI
+{
+public:
+    void CheckDirectory()
+    {
+        if (!filesystem::exists(FILESYSTEM_BOOK))
+            filesystem::create_directories(FILESYSTEM_BOOK);
+        if (!filesystem::exists(FILESYSTEM_USER))
+            filesystem::create_directories(FILESYSTEM_USER);
+    }
+};
+```
+
+main.cpp
+
+```cpp
+#include "library.hpp"
 
 bool IsPureNumber(const string &input)
 {

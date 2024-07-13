@@ -1,5 +1,25 @@
 #include "gui.hpp"
 
+enum Choice
+{
+    AddBook = 1,
+    DeleteBook,
+    SearchBook,
+    EditBook,
+    AddUser,
+    DeleteUser,
+    SearchUser,
+    EditUser,
+    BorrowBook,
+    ReturnBook,
+    BorrowRecord,
+    TenHotBooks,
+    TenActiveUsers,
+    DeleteAllBooks,
+    DeleteAllUsers,
+    Exit
+};
+
 class Library : public GUI
 {
 public:

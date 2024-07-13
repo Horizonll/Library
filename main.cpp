@@ -1,25 +1,5 @@
 #include "library.hpp"
 
-enum Choice
-{
-    AddBook = 1,
-    DeleteBook,
-    SearchBook,
-    EditBook,
-    AddUser,
-    DeleteUser,
-    SearchUser,
-    EditUser,
-    BorrowBook,
-    ReturnBook,
-    BorrowRecord,
-    TenHotBooks,
-    TenActiveUsers,
-    DeleteAllBooks,
-    DeleteAllUsers,
-    Exit
-};
-
 bool IsPureNumber(const string &input)
 {
     return all_of(input.begin(), input.end(), ::isdigit);
