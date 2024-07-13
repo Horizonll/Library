@@ -23,7 +23,7 @@ enum Choice
 class Library : public GUI
 {
 public:
-    void CheckDirectory()
+    void CheckDirectory() const
     {
         if (!filesystem::exists(FILESYSTEM_BOOK))
             filesystem::create_directories(FILESYSTEM_BOOK);
