@@ -300,6 +300,10 @@ classDiagram
     }
     Book <|.. Base
     User <|.. Base
+```
+
+```mermaid
+classDiagram
     class BookManager {
         +getBook(string) const: Book
         +searchBook(string) const: vector<Book>
@@ -343,6 +347,14 @@ classDiagram
     class Library {
         +CheckDirectory() const
     }
+    Manager <|-- BookManager
+    Manager <|-- UserManager
+    GUI <|-- Manager
+    Library <|-- GUI
+```
+
+```mermaid
+classDiagram
     class Choice {
         <<enumeration>>
         AddBook
@@ -362,10 +374,6 @@ classDiagram
         DeleteAllUsers
         Exit
     }
-    Manager <|-- BookManager
-    Manager <|-- UserManager
-    GUI <|-- Manager
-    Library <|-- GUI
 ```
 
 ## 系统调试
