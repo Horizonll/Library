@@ -259,15 +259,25 @@ public:
             break;
         case 1:
             DisplayBook(oldBook);
-            Book book;
             cout << endl;
             cout << "请输入新书名：";
+            Book book;
             getline(cin, book.title);
             book.title = RemoveBlank(book.title);
+            cout << endl;
+            Book newBook = getBook(book.title);
+            int result_ = newBook.title.empty() ? 0 : 1;
             if (book.title.empty())
             {
-                cout << endl;
                 cout << "书名不能为空" << endl;
+                cout << endl;
+                cout << "按任意键返回" << endl;
+                getch();
+                return;
+            }
+            else if (result_)
+            {
+                cout << "图书已存在" << endl;
                 cout << endl;
                 cout << "按任意键返回" << endl;
                 getch();
@@ -493,9 +503,19 @@ public:
             getline(cin, user.name);
             user.name = RemoveBlank(user.name);
             cout << endl;
+            User newUser = getUser(user.name);
+            int result_ = oldUser.name.empty() ? 0 : 1;
             if (user.name.empty())
             {
                 cout << "用户名不能为空" << endl;
+                cout << endl;
+                cout << "按任意键返回" << endl;
+                getch();
+                return;
+            }
+            else if (result_)
+            {
+                cout << "用户已存在" << endl;
                 cout << endl;
                 cout << "按任意键返回" << endl;
                 getch();
